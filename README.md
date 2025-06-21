@@ -1,14 +1,15 @@
-# 🚀 FlashSettle
+# 🚀 Flash
 
 ## A Decentralized Payment Rail for Instant Cross-Border Settlements
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-![Aptos FlashSettle Banner](docs/assets/banner.png)
+![Aptos Flash Banner](docs/assets/banner.png)
 
 ## 💡 Problem Statement
 
 Traditional cross-border payments are plagued by:
+
 - **Delay**: 3-5 days settlement time
 - **Cost**: High fees (5-7% for consumers, 1-3% for businesses)
 - **Complexity**: Multiple intermediaries and currency conversions
@@ -18,7 +19,7 @@ These inefficiencies cost the global economy billions annually and disproportion
 
 ## 🌟 Solution
 
-Aptos FlashSettle is a next-generation payment infrastructure that enables **instant, low-cost cross-border settlements** using Aptos-native stablecoins, sponsored gas transactions, and AI-driven FX optimization.
+Aptos Flash is a next-generation payment infrastructure that enables **instant, low-cost cross-border settlements** using Aptos-native stablecoins, sponsored gas transactions, and AI-driven FX optimization.
 
 ### Core Features
 
@@ -31,7 +32,7 @@ Aptos FlashSettle is a next-generation payment infrastructure that enables **ins
 
 ## 🔍 Why Aptos?
 
-Aptos provides several critical advantages that make FlashSettle possible:
+Aptos provides several critical advantages that make Flash possible:
 
 1. **Native Stablecoins**: Circle's USDC and Tether's USDT are natively issued on Aptos, eliminating bridge risks.
 2. **Transaction Speed**: ~0.65s finality and 19.2K TPS vs. Ethereum's 15 TPS.
@@ -41,19 +42,22 @@ Aptos provides several critical advantages that make FlashSettle possible:
 
 ## 🏗️ Architecture
 
-FlashSettle consists of three main layers:
+Flash consists of three main layers:
 
 ### 1. Frontend Layer
+
 - Merchant API gateway and user portal
 - Fiat on/off ramp integration with payment processors
 - Transaction monitoring dashboard
 
 ### 2. Middleware Layer
+
 - AI-powered settlement path optimizer
 - FX rate monitoring and prediction
 - Liquidity pool management
 
 ### 3. Blockchain Layer
+
 - Smart contracts for escrow and settlement
 - Sponsored transaction management
 - Cross-chain message passing
@@ -72,6 +76,7 @@ See our [Architecture Document](docs/architecture.md) for detailed diagrams and 
 ## 🛣️ Roadmap
 
 ### Phase 1 (Completed)
+
 - [x] Project documentation and architecture design
 - [x] Core smart contract implementation
 - [x] Frontend payment flow UI
@@ -79,6 +84,7 @@ See our [Architecture Document](docs/architecture.md) for detailed diagrams and 
 - [x] MVP configuration and deployment
 
 ### Phase 2 (In Progress)
+
 - [ ] Circle's CCTP integration
 - [ ] Gasless transaction implementation
 - [ ] Basic AI routing prototype
@@ -86,6 +92,7 @@ See our [Architecture Document](docs/architecture.md) for detailed diagrams and 
 - [ ] Merchant dashboard improvements
 
 ### Phase 3 (Planned)
+
 - [ ] Additional currency pair support
 - [ ] Mobile app development
 - [ ] Institutional API enhancements
@@ -96,10 +103,10 @@ See our [Architecture Document](docs/architecture.md) for detailed diagrams and 
 
 ```bash
 # Clone the repository
-git clone https://github.com/jaffarkeikei/FlashSettle.git
+git clone https://github.com/jaffarkeikei/Flash.git
 
 # Install dependencies
-cd flashsettle
+cd flash
 npm install
 
 # Configure environment variables
@@ -125,4 +132,4 @@ npm run dev
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
