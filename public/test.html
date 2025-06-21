@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Test</title>
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .btn {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Button Test Page</h1>
+    <p>This page tests basic button functionality</p>
+    
+    <div class="mt-4">
+      <button id="testBtn1" class="btn btn-primary">Test Button 1</button>
+      <button id="testBtn2" class="btn btn-secondary">Test Button 2</button>
+      <button id="alertBtn" class="btn btn-success">Show Alert</button>
+      <button id="modalBtn" class="btn btn-info">Show Modal</button>
+    </div>
+    
+    <div class="mt-4">
+      <div id="output" class="alert alert-light">
+        Click events will be logged here
+      </div>
+    </div>
+  </div>
+  
+  <!-- Test Modal -->
+  <div class="modal fade" id="testModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Test Modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>This is a test modal. If you can see this, modal functionality is working.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script>
+    // Output element for logging
+    const output = document.getElementById('output');
+    
+    // Log function
+    function log(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      output.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+      console.log(message);
+    }
+    
+    // Button 1
+    document.getElementById('testBtn1').addEventListener('click', function() {
+      log('Test Button 1 clicked');
+    });
+    
+    // Button 2
+    document.getElementById('testBtn2').addEventListener('click', function() {
+      log('Test Button 2 clicked');
+    });
+    
+    // Alert Button
+    document.getElementById('alertBtn').addEventListener('click', function() {
+      log('Alert Button clicked');
+      alert('This is a test alert!');
+    });
+    
+    // Modal Button
+    document.getElementById('modalBtn').addEventListener('click', function() {
+      log('Modal Button clicked');
+      const modal = new bootstrap.Modal(document.getElementById('testModal'));
+      modal.show();
+    });
+    
+    // Log page load
+    log('Page loaded and script executed');
+  </script>
+</body>
+</html> 
