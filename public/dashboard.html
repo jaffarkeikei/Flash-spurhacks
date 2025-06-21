@@ -785,20 +785,27 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
-      <a class="navbar-brand" href="/">
-        <img src="/img/flash_logo.png" alt="Flash" height="30" class="me-2">
-      </a>
+    <a class="navbar-brand" href="/">
+      <img src="/img/flash_logo.png" alt="Flash" height="30" class="me-2">
+    </a>
+    <!-- Toggler button for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarContent">
       <div class="navbar-nav ms-auto">
-        <div class="d-flex align-items-center">
-          <div class="network-status">
+        <div class="d-flex align-items-center flex-wrap">
+          <div class="network-status mb-2 mb-lg-0 me-lg-3">
             <div class="status-dot"></div>
             <span>Aptos Devnet</span>
           </div>
-          <div class="dropdown me-3">
+          <div class="dropdown me-3 mb-2 mb-lg-0">
             <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-user-circle me-1"></i>
               <span id="currentAccountName">Alice Johnson</span>
-    </button>
+            </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
               <li><a class="dropdown-item" href="#" onclick="switchAccount(0)">
                 <i class="fas fa-user me-2"></i>Alice Johnson
@@ -814,18 +821,19 @@
               </a></li>
             </ul>
           </div>
-          <span class="text-dark me-3" id="userDisplay">
+          <span class="text-dark me-3 mb-2 mb-lg-0" id="userDisplay">
             <i class="fas fa-user-circle me-1"></i>
             Demo User
           </span>
-          <button class="btn btn-sm btn-outline-secondary" onclick="logout()">
+          <button class="btn btn-sm btn-outline-secondary mb-2 mb-lg-0" onclick="logout()">
             <i class="fas fa-sign-out-alt me-1"></i>
             Logout
           </button>
         </div>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <!-- Main Container -->
   <div class="container-fluid main-container">
@@ -1622,4 +1630,4 @@
   </script>
 </body>
 
-</html> 
+</html>
