@@ -238,7 +238,48 @@
                         <span class="loading-spinner spinner-border spinner-border-sm" id="loadingSpinner"></span>
                         <i class="fas fa-sign-in-alt me-2"></i>Access Flash Dashboard
                     </button>
+                    
+                    <button type="button" class="btn-login" id="signInBtn" style="margin-top: 15px;">
+                        <i class="fas fa-user-check me-2"></i>Sign In
+                    </button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Modal -->
+    <div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cameraModalLabel">
+                        <i class="fas fa-camera me-2"></i>Take Photo for Verification
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="camera-container">
+                        <video id="cameraVideo" autoplay playsinline style="width: 100%; max-width: 500px; border-radius: 12px;"></video>
+                        <canvas id="cameraCanvas" style="display: none;"></canvas>
+                        <img id="capturedImage" style="display: none; width: 100%; max-width: 500px; border-radius: 12px;">
+                    </div>
+                    <div class="camera-controls mt-3">
+                        <button type="button" class="btn btn-primary me-2" id="captureBtn">
+                            <i class="fas fa-camera me-2"></i>Capture Photo
+                        </button>
+                        <button type="button" class="btn btn-secondary me-2" id="retakeBtn" style="display: none;">
+                            <i class="fas fa-redo me-2"></i>Retake
+                        </button>
+                        <button type="button" class="btn btn-success" id="savePhotoBtn" style="display: none;">
+                            <i class="fas fa-save me-2"></i>Save Photo
+                        </button>
+                    </div>
+                    <div class="camera-status mt-3">
+                        <div class="alert alert-info" id="cameraStatus">
+                            <i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -316,6 +357,134 @@
                     // Reset form state
                     loginBtn.disabled = false;
                     loadingSpinner.style.display = 'none';
+                }
+            });
+
+            // Camera functionality
+            const signInBtn = document.getElementById('signInBtn');
+            const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'));
+            const cameraVideo = document.getElementById('cameraVideo');
+            const cameraCanvas = document.getElementById('cameraCanvas');
+            const capturedImage = document.getElementById('capturedImage');
+            const captureBtn = document.getElementById('captureBtn');
+            const retakeBtn = document.getElementById('retakeBtn');
+            const savePhotoBtn = document.getElementById('savePhotoBtn');
+            const cameraStatus = document.getElementById('cameraStatus');
+            
+            let stream = null;
+            let capturedPhotoData = null;
+            
+            // Sign In button click handler
+            signInBtn.addEventListener('click', function() {
+                cameraModal.show();
+            });
+            
+            // Initialize camera when modal opens
+            document.getElementById('cameraModal').addEventListener('show.bs.modal', async function() {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 },
+                            facingMode: 'user'
+                        } 
+                    });
+                    cameraVideo.srcObject = stream;
+                    cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
+                } catch (error) {
+                    console.error('Camera access error:', error);
+                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Camera access denied. Please allow camera permissions.';
+                }
+            });
+            
+            // Stop camera when modal closes
+            document.getElementById('cameraModal').addEventListener('hidden.bs.modal', function() {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                    stream = null;
+                }
+                // Reset UI
+                cameraVideo.style.display = 'block';
+                capturedImage.style.display = 'none';
+                captureBtn.style.display = 'inline-block';
+                retakeBtn.style.display = 'none';
+                savePhotoBtn.style.display = 'none';
+                cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
+            });
+            
+            // Capture photo
+            captureBtn.addEventListener('click', function() {
+                const context = cameraCanvas.getContext('2d');
+                cameraCanvas.width = cameraVideo.videoWidth;
+                cameraCanvas.height = cameraVideo.videoHeight;
+                
+                // Draw video frame to canvas
+                context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+                
+                // Convert to base64
+                capturedPhotoData = cameraCanvas.toDataURL('image/jpeg', 0.8);
+                
+                // Display captured image
+                capturedImage.src = capturedPhotoData;
+                cameraVideo.style.display = 'none';
+                capturedImage.style.display = 'block';
+                
+                // Update buttons
+                captureBtn.style.display = 'none';
+                retakeBtn.style.display = 'inline-block';
+                savePhotoBtn.style.display = 'inline-block';
+                
+                cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo captured! Review and save.';
+            });
+            
+            // Retake photo
+            retakeBtn.addEventListener('click', function() {
+                cameraVideo.style.display = 'block';
+                capturedImage.style.display = 'none';
+                captureBtn.style.display = 'inline-block';
+                retakeBtn.style.display = 'none';
+                savePhotoBtn.style.display = 'none';
+                capturedPhotoData = null;
+                cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
+            });
+            
+            // Save photo
+            savePhotoBtn.addEventListener('click', async function() {
+                if (!capturedPhotoData) {
+                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>No photo to save!';
+                    return;
+                }
+                
+                try {
+                    // Generate filename with timestamp
+                    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                    const filename = `user_photo_${timestamp}.jpg`;
+                    
+                    // Convert base64 to blob
+                    const response = await fetch(capturedPhotoData);
+                    const blob = await response.blob();
+                    
+                    // Create download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = URL.createObjectURL(blob);
+                    downloadLink.download = filename;
+                    
+                    // Trigger download
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                    
+                    // Update status
+                    cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo saved successfully!';
+                    
+                    // Close modal after short delay
+                    setTimeout(() => {
+                        cameraModal.hide();
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('Save photo error:', error);
+                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Error saving photo. Please try again.';
                 }
             });
         });
