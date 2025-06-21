@@ -1,10 +1,10 @@
 # AI Component Design
 
-This document outlines the artificial intelligence components of the Aptos FlashSettle platform, focusing on the settlement path optimizer and FX prediction capabilities.
+This document outlines the artificial intelligence components of the Aptos Flash platform, focusing on the settlement path optimizer and FX prediction capabilities.
 
 ## Overview
 
-FlashSettle leverages AI to optimize cross-border payments in two primary ways:
+Flash leverages AI to optimize cross-border payments in two primary ways:
 
 1. **Settlement Path Optimization**: Determining the most efficient route for funds to travel from sender to recipient
 2. **FX Rate Prediction**: Forecasting exchange rate movements to identify optimal transaction timing
@@ -372,7 +372,7 @@ sequenceDiagram
     end
 ```
 
-The AI components integrate with the rest of the FlashSettle platform as follows:
+The AI components integrate with the rest of the Flash platform as follows:
 
 1. **Transaction Initiation**: When a new payment is created, the Transaction Orchestrator requests predictions from the AI services.
 
@@ -487,6 +487,6 @@ The AI components include comprehensive monitoring and governance:
 
 ## Conclusion
 
-The AI components of FlashSettle represent a significant advancement in cross-border payment optimization, leveraging the speed and efficiency of the Aptos blockchain combined with sophisticated machine learning techniques. By continuously learning and improving from transaction data, the system provides increasingly efficient payment routing and timing, creating a superior experience for users while minimizing costs.
+The AI components of Flash represent a significant advancement in cross-border payment optimization, leveraging the speed and efficiency of the Aptos blockchain combined with sophisticated machine learning techniques. By continuously learning and improving from transaction data, the system provides increasingly efficient payment routing and timing, creating a superior experience for users while minimizing costs.
 
 Future iterations will further enhance these capabilities, making cross-border payments even more seamless and cost-effective through the power of AI-optimized blockchain technology. 

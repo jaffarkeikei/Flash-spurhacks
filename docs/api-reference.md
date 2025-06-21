@@ -1,15 +1,15 @@
 # API Reference
 
-The FlashSettle API provides programmatic access to initiate and manage cross-border payments using the Aptos blockchain. This document outlines the available endpoints, authentication mechanisms, and expected request/response formats.
+The Flash API provides programmatic access to initiate and manage cross-border payments using the Aptos blockchain. This document outlines the available endpoints, authentication mechanisms, and expected request/response formats.
 
 ## Base URL
 
-**Production**: `https://api.flashsettle.com/v1`  
-**Sandbox**: `https://sandbox-api.flashsettle.com/v1`
+**Production**: `https://api.flash.com/v1`  
+**Sandbox**: `https://sandbox-api.flash.com/v1`
 
 ## Authentication
 
-FlashSettle uses OAuth 2.0 with JWT tokens for API authentication.
+Flash uses OAuth 2.0 with JWT tokens for API authentication.
 
 ### Obtaining Access Tokens
 
@@ -85,7 +85,7 @@ Initiates a new cross-border payment.
 {
   "source": {
     "currency": "USD",
-    "amount": 1000.00
+    "amount": 1000.0
   },
   "destination": {
     "currency": "EUR",
@@ -95,7 +95,7 @@ Initiates a new cross-border payment.
     }
   },
   "execution": {
-    "mode": "immediate",  // or "optimal"
+    "mode": "immediate", // or "optimal"
     "urgency": "standard" // or "express"
   },
   "reference": "INV-12345",
@@ -116,7 +116,7 @@ Initiates a new cross-border payment.
   "updated_at": "2023-05-15T12:34:56Z",
   "source": {
     "currency": "USD",
-    "amount": 1000.00
+    "amount": 1000.0
   },
   "destination": {
     "currency": "EUR",
@@ -137,7 +137,7 @@ Initiates a new cross-border payment.
     "expiry": "2023-05-15T12:39:56Z"
   },
   "fee": {
-    "amount": 3.50,
+    "amount": 3.5,
     "currency": "USD"
   },
   "transactions": [
@@ -178,14 +178,14 @@ Retrieves a list of payments based on filter criteria.
 
 #### Query Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `status` | string | Filter by payment status (e.g., "pending", "completed", "failed") |
-| `created_after` | ISO date | Filter payments created after this timestamp |
-| `created_before` | ISO date | Filter payments created before this timestamp |
-| `reference` | string | Filter by reference |
-| `limit` | integer | Maximum number of results (default: 20, max: 100) |
-| `cursor` | string | Pagination cursor from previous response |
+| Parameter        | Type     | Description                                                       |
+| ---------------- | -------- | ----------------------------------------------------------------- |
+| `status`         | string   | Filter by payment status (e.g., "pending", "completed", "failed") |
+| `created_after`  | ISO date | Filter payments created after this timestamp                      |
+| `created_before` | ISO date | Filter payments created before this timestamp                     |
+| `reference`      | string   | Filter by reference                                               |
+| `limit`          | integer  | Maximum number of results (default: 20, max: 100)                 |
+| `cursor`         | string   | Pagination cursor from previous response                          |
 
 #### Response
 
@@ -199,7 +199,7 @@ Retrieves a list of payments based on filter criteria.
       "updated_at": "2023-05-15T12:35:22Z",
       "source": {
         "currency": "USD",
-        "amount": 1000.00
+        "amount": 1000.0
       },
       "destination": {
         "currency": "EUR",
@@ -208,9 +208,9 @@ Retrieves a list of payments based on filter criteria.
           "type": "wallet_address",
           "address": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
         }
-      },
+      }
       // ... additional payment details
-    },
+    }
     // ... more payments
   ],
   "pagination": {
@@ -233,7 +233,7 @@ Attempts to cancel a pending payment.
 ```json
 {
   "id": "pmt_01FGEH8JNZV9A7D8QT3R6KM4NP",
-  "status": "cancelling",
+  "status": "cancelling"
   // ... other payment details
 }
 ```
@@ -250,11 +250,11 @@ Retrieves current exchange rates for a currency pair.
 
 #### Query Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `source_currency` | string | Source currency code (e.g., "USD") |
-| `destination_currency` | string | Destination currency code (e.g., "EUR") |
-| `amount` | number | Optional. Amount to convert for precise quote |
+| Parameter              | Type   | Description                                   |
+| ---------------------- | ------ | --------------------------------------------- |
+| `source_currency`      | string | Source currency code (e.g., "USD")            |
+| `destination_currency` | string | Destination currency code (e.g., "EUR")       |
+| `amount`               | number | Optional. Amount to convert for precise quote |
 
 #### Response
 
@@ -264,8 +264,8 @@ Retrieves current exchange rates for a currency pair.
   "destination_currency": "EUR",
   "rate": 0.9205,
   "inverse_rate": 1.0864,
-  "amount": 1000.00,
-  "converted_amount": 920.50,
+  "amount": 1000.0,
+  "converted_amount": 920.5,
   "timestamp": "2023-05-15T12:34:56Z",
   "expiry": "2023-05-15T12:39:56Z"
 }
@@ -281,13 +281,13 @@ Retrieves historical exchange rates for a currency pair.
 
 #### Query Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `source_currency` | string | Source currency code (e.g., "USD") |
-| `destination_currency` | string | Destination currency code (e.g., "EUR") |
-| `start_date` | ISO date | Start date for historical data |
-| `end_date` | ISO date | End date for historical data |
-| `interval` | string | Data interval ("hour", "day", "week") |
+| Parameter              | Type     | Description                             |
+| ---------------------- | -------- | --------------------------------------- |
+| `source_currency`      | string   | Source currency code (e.g., "USD")      |
+| `destination_currency` | string   | Destination currency code (e.g., "EUR") |
+| `start_date`           | ISO date | Start date for historical data          |
+| `end_date`             | ISO date | End date for historical data            |
+| `interval`             | string   | Data interval ("hour", "day", "week")   |
 
 #### Response
 
@@ -303,8 +303,8 @@ Retrieves historical exchange rates for a currency pair.
     },
     {
       "timestamp": "2023-05-02T00:00:00Z",
-      "rate": 0.9210
-    },
+      "rate": 0.921
+    }
     // ... more historical rates
   ]
 }
@@ -334,7 +334,7 @@ Retrieves the merchant profile information.
   "settings": {
     "auto_convert": true,
     "default_settlement_currency": "USD",
-    "webhook_url": "https://acme.com/webhooks/flashsettle"
+    "webhook_url": "https://acme.com/webhooks/flash"
   }
 }
 ```
@@ -354,16 +354,16 @@ Retrieves current balances for all currencies.
   "balances": [
     {
       "currency": "USD",
-      "amount": 24580.50,
-      "available": 24580.50,
-      "pending": 0.00
+      "amount": 24580.5,
+      "available": 24580.5,
+      "pending": 0.0
     },
     {
       "currency": "EUR",
       "amount": 15420.75,
-      "available": 15000.00,
+      "available": 15000.0,
       "pending": 420.75
-    },
+    }
     // ... more currencies
   ]
 }
@@ -381,7 +381,7 @@ Configures the webhook URL for receiving payment notifications.
 
 ```json
 {
-  "url": "https://example.com/webhooks/flashsettle",
+  "url": "https://example.com/webhooks/flash",
   "events": ["payment.created", "payment.completed", "payment.failed"],
   "secret": "whsec_1234567890abcdefghijklmnopqrstuvwxyz"
 }
@@ -392,7 +392,7 @@ Configures the webhook URL for receiving payment notifications.
 ```json
 {
   "webhook_id": "whk_01FGEH8JNZV9A7D",
-  "url": "https://example.com/webhooks/flashsettle",
+  "url": "https://example.com/webhooks/flash",
   "events": ["payment.created", "payment.completed", "payment.failed"],
   "status": "active",
   "created_at": "2023-05-15T12:34:56Z"
@@ -411,12 +411,12 @@ Retrieves the optimal payment route for a given currency pair and amount.
 
 #### Query Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `source_currency` | string | Source currency code (e.g., "USD") |
-| `destination_currency` | string | Destination currency code (e.g., "EUR") |
-| `amount` | number | Amount to transfer |
-| `priority` | string | "speed", "cost", or "balanced" (default) |
+| Parameter              | Type   | Description                              |
+| ---------------------- | ------ | ---------------------------------------- |
+| `source_currency`      | string | Source currency code (e.g., "USD")       |
+| `destination_currency` | string | Destination currency code (e.g., "EUR")  |
+| `amount`               | number | Amount to transfer                       |
+| `priority`             | string | "speed", "cost", or "balanced" (default) |
 
 #### Response
 
@@ -424,7 +424,7 @@ Retrieves the optimal payment route for a given currency pair and amount.
 {
   "source": {
     "currency": "USD",
-    "amount": 1000.00
+    "amount": 1000.0
   },
   "destination": {
     "currency": "BRL",
@@ -438,7 +438,7 @@ Retrieves the optimal payment route for a given currency pair and amount.
         "to": "USDC",
         "platform": "Circle",
         "estimated_time_seconds": 15,
-        "estimated_fee": 0.50
+        "estimated_fee": 0.5
       },
       {
         "stage": 2,
@@ -454,7 +454,7 @@ Retrieves the optimal payment route for a given currency pair and amount.
         "to": "BRL",
         "platform": "LocalPartnerExchange",
         "estimated_time_seconds": 5,
-        "estimated_fee": 2.50
+        "estimated_fee": 2.5
       }
     ],
     "total_estimated_time_seconds": 20.65,
@@ -490,12 +490,12 @@ Retrieves AI-powered predictions for optimal FX timing.
 
 #### Query Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `source_currency` | string | Source currency code (e.g., "USD") |
-| `destination_currency` | string | Destination currency code (e.g., "EUR") |
-| `amount` | number | Amount to transfer |
-| `time_horizon` | string | "short" (15min), "medium" (4h), "long" (24h) |
+| Parameter              | Type   | Description                                  |
+| ---------------------- | ------ | -------------------------------------------- |
+| `source_currency`      | string | Source currency code (e.g., "USD")           |
+| `destination_currency` | string | Destination currency code (e.g., "EUR")      |
+| `amount`               | number | Amount to transfer                           |
+| `time_horizon`         | string | "short" (15min), "medium" (4h), "long" (24h) |
 
 #### Response
 
@@ -503,28 +503,28 @@ Retrieves AI-powered predictions for optimal FX timing.
 {
   "source_currency": "USD",
   "destination_currency": "EUR",
-  "amount": 10000.00,
+  "amount": 10000.0,
   "current_rate": 0.9205,
-  "current_converted_amount": 9205.00,
+  "current_converted_amount": 9205.0,
   "prediction": {
     "recommended_action": "wait",
     "expected_best_rate": 0.9245,
     "expected_best_time": "2023-05-15T16:45:00Z",
-    "potential_savings": 40.00,
+    "potential_savings": 40.0,
     "confidence": 0.78,
     "expiry": "2023-05-15T13:30:00Z"
   },
   "forecast": [
     {
       "timestamp": "2023-05-15T13:00:00Z",
-      "predicted_rate": 0.9210,
+      "predicted_rate": 0.921,
       "confidence_interval": [0.9195, 0.9225]
     },
     {
       "timestamp": "2023-05-15T14:00:00Z",
       "predicted_rate": 0.9225,
       "confidence_interval": [0.9205, 0.9245]
-    },
+    }
     // ... more forecast points
   ]
 }
@@ -532,17 +532,18 @@ Retrieves AI-powered predictions for optimal FX timing.
 
 ## Webhook Events
 
-FlashSettle sends webhook notifications for various events. Each notification includes a signature header for verification.
+Flash sends webhook notifications for various events. Each notification includes a signature header for verification.
 
 ### Verification
 
-Webhooks include an `X-FlashSettle-Signature` header with an HMAC signature calculated using your webhook secret:
+Webhooks include an `X-Flash-Signature` header with an HMAC signature calculated using your webhook secret:
 
 ```
-X-FlashSettle-Signature: t=1684148096,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd
+X-Flash-Signature: t=1684148096,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd
 ```
 
 To verify the signature:
+
 1. Extract the timestamp (`t`) and signature (`v1`) from the header
 2. Concatenate the timestamp, a period, and the raw request body: `{timestamp}.{body}`
 3. Compute an HMAC with SHA-256 using your webhook secret
@@ -550,13 +551,13 @@ To verify the signature:
 
 ### Event Types
 
-| Event Type | Description |
-|------------|-------------|
-| `payment.created` | A new payment has been created |
-| `payment.processing` | Payment is being processed |
-| `payment.completed` | Payment has been completed successfully |
-| `payment.failed` | Payment processing has failed |
-| `payment.cancelled` | Payment has been cancelled |
+| Event Type           | Description                             |
+| -------------------- | --------------------------------------- |
+| `payment.created`    | A new payment has been created          |
+| `payment.processing` | Payment is being processed              |
+| `payment.completed`  | Payment has been completed successfully |
+| `payment.failed`     | Payment processing has failed           |
+| `payment.cancelled`  | Payment has been cancelled              |
 
 ### Event Structure
 
@@ -567,7 +568,7 @@ To verify the signature:
   "created_at": "2023-05-15T12:35:22Z",
   "data": {
     "id": "pmt_01FGEH8JNZV9A7D8QT3R6KM4NP",
-    "status": "completed",
+    "status": "completed"
     // ... full payment object as per GET /payments/{id} response
   }
 }
@@ -575,7 +576,7 @@ To verify the signature:
 
 ## Error Handling
 
-FlashSettle API uses standard HTTP status codes and returns detailed error information in the response body.
+Flash API uses standard HTTP status codes and returns detailed error information in the response body.
 
 ### Error Response Format
 
@@ -593,32 +594,32 @@ FlashSettle API uses standard HTTP status codes and returns detailed error infor
 
 ### Common Error Types
 
-| Error Type | Description |
-|------------|-------------|
-| `authentication_error` | Issues with API keys or authentication tokens |
-| `invalid_request_error` | Malformed requests or invalid parameters |
-| `rate_limit_error` | Too many requests made in a given time period |
-| `api_error` | Unexpected server errors |
-| `resource_error` | Issues with requested resources (not found, already exists, etc.) |
+| Error Type              | Description                                                       |
+| ----------------------- | ----------------------------------------------------------------- |
+| `authentication_error`  | Issues with API keys or authentication tokens                     |
+| `invalid_request_error` | Malformed requests or invalid parameters                          |
+| `rate_limit_error`      | Too many requests made in a given time period                     |
+| `api_error`             | Unexpected server errors                                          |
+| `resource_error`        | Issues with requested resources (not found, already exists, etc.) |
 
 ### Common HTTP Status Codes
 
-| Status Code | Description |
-|-------------|-------------|
-| 200 | OK - The request succeeded |
-| 201 | Created - A new resource was created |
-| 400 | Bad Request - The request was malformed |
-| 401 | Unauthorized - Authentication failed |
-| 403 | Forbidden - The authenticated user lacks permission |
-| 404 | Not Found - The requested resource was not found |
-| 409 | Conflict - The request conflicts with the current state |
-| 422 | Unprocessable Entity - Validation failed |
-| 429 | Too Many Requests - Rate limit exceeded |
-| 500 | Internal Server Error - Something went wrong on the server |
+| Status Code | Description                                                |
+| ----------- | ---------------------------------------------------------- |
+| 200         | OK - The request succeeded                                 |
+| 201         | Created - A new resource was created                       |
+| 400         | Bad Request - The request was malformed                    |
+| 401         | Unauthorized - Authentication failed                       |
+| 403         | Forbidden - The authenticated user lacks permission        |
+| 404         | Not Found - The requested resource was not found           |
+| 409         | Conflict - The request conflicts with the current state    |
+| 422         | Unprocessable Entity - Validation failed                   |
+| 429         | Too Many Requests - Rate limit exceeded                    |
+| 500         | Internal Server Error - Something went wrong on the server |
 
 ## Rate Limits
 
-FlashSettle implements rate limiting to protect the API from abuse. Rate limits are applied per API key and vary by endpoint.
+Flash implements rate limiting to protect the API from abuse. Rate limits are applied per API key and vary by endpoint.
 
 Rate limit headers are included in all API responses:
 
@@ -634,39 +635,39 @@ If you exceed the rate limit, you'll receive a 429 Too Many Requests response wi
 
 The sandbox environment provides a testing ground with simulated responses. To use the sandbox:
 
-1. Register for a sandbox account at [https://dashboard.flashsettle.com/sandbox/register](https://dashboard.flashsettle.com/sandbox/register)
-2. Use the sandbox API base URL: `https://sandbox-api.flashsettle.com/v1`
+1. Register for a sandbox account at [https://dashboard.flash.com/sandbox/register](https://dashboard.flash.com/sandbox/register)
+2. Use the sandbox API base URL: `https://sandbox-api.flash.com/v1`
 3. Use the provided sandbox API credentials
 
 ### Sandbox Test Accounts
 
-| Currency | Address | Initial Balance |
-|----------|---------|----------------|
-| USDC | 0xsandbox1 | 10,000 USDC |
-| USDT | 0xsandbox2 | 10,000 USDT |
-| EUR | 0xsandbox3 | 10,000 EUR |
+| Currency | Address    | Initial Balance |
+| -------- | ---------- | --------------- |
+| USDC     | 0xsandbox1 | 10,000 USDC     |
+| USDT     | 0xsandbox2 | 10,000 USDT     |
+| EUR      | 0xsandbox3 | 10,000 EUR      |
 
 ### Sandbox Test Cards
 
-| Card Number | Behavior |
-|-------------|----------|
-| 4242 4242 4242 4242 | Always succeeds |
-| 4000 0000 0000 0002 | Always fails |
+| Card Number         | Behavior                |
+| ------------------- | ----------------------- |
+| 4242 4242 4242 4242 | Always succeeds         |
+| 4000 0000 0000 0002 | Always fails            |
 | 4000 0000 0000 9995 | Requires authentication |
 
 ## Versioning
 
-The FlashSettle API is versioned via the URL path. The current version is `v1`. When significant changes are made, a new version will be introduced, and the previous version will remain supported for at least 12 months after deprecation notice.
+The Flash API is versioned via the URL path. The current version is `v1`. When significant changes are made, a new version will be introduced, and the previous version will remain supported for at least 12 months after deprecation notice.
 
 ## SDK Support
 
-FlashSettle provides official SDKs for the following languages:
+Flash provides official SDKs for the following languages:
 
-- JavaScript/TypeScript: [GitHub](https://github.com/flashsettle/flashsettle-js)
-- Python: [GitHub](https://github.com/flashsettle/flashsettle-python)
-- Java: [GitHub](https://github.com/flashsettle/flashsettle-java)
-- PHP: [GitHub](https://github.com/flashsettle/flashsettle-php)
+- JavaScript/TypeScript: [GitHub](https://github.com/flash/flash-js)
+- Python: [GitHub](https://github.com/flash/flash-python)
+- Java: [GitHub](https://github.com/flash/flash-java)
+- PHP: [GitHub](https://github.com/flash/flash-php)
 
 ## Support
 
-For API support, contact [api@flashsettle.com](mailto:api@flashsettle.com) or visit the [developer forum](https://developers.flashsettle.com/forum). 
+For API support, contact [api@flash.com](mailto:api@flash.com) or visit the [developer forum](https://developers.flash.com/forum).
