@@ -2,6 +2,7 @@ const { logger } = require('../../utils/logger');
 const { NotFoundError, APIError } = require('../middleware/errorHandler');
 const paymentService = require('../../services/payment/paymentService');
 const blockchainService = require('../../services/blockchain/blockchainService');
+const demoBlockchainService = require('../../services/blockchain/demoBlockchainService');
 const aiService = require('../../services/ai/aiService');
 
 /**
@@ -34,15 +35,31 @@ const createPayment = async (req, res, next) => {
       routeInfo
     });
 
+    // Check if this is a demo account transaction
+    const isDemoTransaction = demoBlockchainService.getDemoAccountByAddress(recipient);
+    
     // Initiate blockchain transaction
-    const blockchainTxn = await blockchainService.createPayment({
-      paymentId: payment.id,
-      senderId,
-      amount: payment.amount,
-      fee: payment.fee,
-      recipient: payment.recipient,
-      sourceCurrency: payment.sourceCurrency
-    });
+    let blockchainTxn;
+    if (isDemoTransaction) {
+      logger.info('Using demo blockchain service for demo account transaction');
+      blockchainTxn = await demoBlockchainService.submitDemoPayment({
+        id: payment.id,
+        senderId,
+        amount: payment.amount,
+        fee: payment.fee,
+        recipient: payment.recipient,
+        sourceCurrency: payment.sourceCurrency
+      });
+    } else {
+      blockchainTxn = await blockchainService.createPayment({
+        paymentId: payment.id,
+        senderId,
+        amount: payment.amount,
+        fee: payment.fee,
+        recipient: payment.recipient,
+        sourceCurrency: payment.sourceCurrency
+      });
+    }
 
     // Update payment with blockchain transaction details
     const updatedPayment = await paymentService.updatePaymentWithTransaction(payment.id, blockchainTxn);
@@ -121,7 +138,14 @@ const getPaymentDetails = async (req, res, next) => {
     // Get blockchain status if payment has a transaction
     let blockchainStatus = null;
     if (payment.transactionHash) {
-      blockchainStatus = await blockchainService.getTransactionStatus(payment.transactionHash);
+      // Check if this is a demo transaction
+      const isDemoTransaction = demoBlockchainService.getDemoAccountByAddress(payment.recipient);
+      
+      if (isDemoTransaction) {
+        blockchainStatus = await demoBlockchainService.getDemoTransactionStatus(payment.transactionHash);
+      } else {
+        blockchainStatus = await blockchainService.getTransactionStatus(payment.transactionHash);
+      }
     }
 
     res.status(200).json({

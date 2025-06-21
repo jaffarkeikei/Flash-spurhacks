@@ -17,18 +17,58 @@
     }
   
     .navbar {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      padding: 10px 0;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      border-bottom: 1px solid #e0e0e0;
     }
   
     .navbar-brand {
-      font-weight: bold;
-      color: #667eea !important;
-      font-size: 20px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #333 !important;
+      display: flex;
+      align-items: center;
     }
+  
+    .navbar-brand img {
+      margin-right: 8px;
+    }
+  
+    .network-status {
+      display: flex;
+      align-items: center;
+      background: rgba(102, 126, 234, 0.1);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #667eea;
+      margin-right: 20px;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+  
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: pulse 2s infinite;
+    }
+  
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+  
+
   
     .main-container {
       padding: 20px;
@@ -86,67 +126,78 @@
       margin-bottom: 25px;
     }
   
-    .stat-card {
+        .stat-card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
-      padding: 25px;
-      text-align: center;
+      padding: 20px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-align: left;
     }
-  
+
     .stat-card:hover {
       transform: translateY(-2px);
     }
-  
+
     .stat-icon {
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 15px;
-      font-size: 20px;
+      font-size: 22px;
       color: white;
+      flex-shrink: 0;
     }
   
-    .stat-icon.blue {
+        .stat-icon.blue {
       background: linear-gradient(135deg, #667eea, #764ba2);
     }
-  
+
     .stat-icon.cyan {
       background: linear-gradient(135deg, #17a2b8, #20c997);
     }
-  
+
     .stat-icon.orange {
       background: linear-gradient(135deg, #fd7e14, #ffc107);
     }
-  
+
     .stat-icon.teal {
       background: linear-gradient(135deg, #20c997, #17a2b8);
     }
-  
+
+    .stat-content {
+      flex: 1;
+      min-width: 0;
+    }
+
     .stat-card h6 {
-      margin: 0 0 8px 0;
-      font-size: 13px;
+      margin: 0 0 4px 0;
+      font-size: 12px;
       color: #666;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-  
+
     .stat-value {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       color: #333;
-      margin: 0;
+      margin: 0 0 2px 0;
+      line-height: 1.1;
     }
-  
+
     .stat-subtitle {
-      font-size: 12px;
+      font-size: 11px;
       color: #888;
-      margin: 8px 0 0 0;
+      margin: 0;
+      line-height: 1.2;
     }
   
     .bottom-section {
@@ -247,53 +298,93 @@
       padding: 10px 12px;
     }
   
-    .transaction-item {
+        .transaction-item {
       border: 1px solid #e1e5e9;
       border-radius: 10px;
       padding: 15px;
       margin-bottom: 12px;
       transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
-  
+
     .transaction-item:hover {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transform: translateY(-1px);
     }
-  
+
+    .transaction-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .transaction-avatar.completed {
+      background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .transaction-avatar.processing {
+      background: linear-gradient(135deg, #ffc107, #fd7e14);
+    }
+
+    .transaction-content {
+      flex: 1;
+      min-width: 0;
+    }
+
     .transaction-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-  
+
     .transaction-amount {
       font-weight: 700;
       font-size: 15px;
+      color: #333;
     }
-  
+
     .transaction-status {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
+      white-space: nowrap;
     }
-  
+
     .status-completed {
       background: #d4edda;
       color: #155724;
     }
-  
+
     .status-processing {
       background: #fff3cd;
       color: #856404;
     }
-  
+
     .transaction-details {
       font-size: 12px;
       color: #666;
-      line-height: 1.4;
+      line-height: 1.3;
+    }
+
+    .transaction-details div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   
     .loading-overlay {
@@ -557,6 +648,31 @@
         grid-template-columns: 1fr;
         gap: 15px;
       }
+
+      .stat-card {
+        height: auto;
+        min-height: 100px;
+        padding: 18px;
+        gap: 15px;
+      }
+
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+      }
+
+      .stat-card h6 {
+        font-size: 11px;
+      }
+
+      .stat-subtitle {
+        font-size: 10px;
+      }
   
       .info-grid {
         grid-template-columns: 1fr;
@@ -567,12 +683,31 @@
         padding: 20px;
       }
   
-      .form-control {
+            .form-control {
         padding: 10px 14px;
         font-size: 14px;
       }
+
+      .transaction-item {
+        gap: 12px;
+      }
+
+      .transaction-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      .transaction-amount {
+        font-size: 14px;
+      }
+
+      .transaction-status {
+        font-size: 9px;
+        padding: 2px 6px;
+      }
     }
-  
+
     @media (max-width: 576px) {
       .main-container {
         padding: 8px;
@@ -583,7 +718,27 @@
       }
   
       .stat-card {
-        padding: 20px;
+        padding: 15px;
+        gap: 12px;
+        min-height: 85px;
+      }
+
+      .stat-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+      }
+
+      .stat-value {
+        font-size: 18px;
+      }
+
+      .stat-card h6 {
+        font-size: 10px;
+      }
+
+      .stat-subtitle {
+        font-size: 9px;
       }
   
       .section-header {
@@ -598,22 +753,77 @@
         padding: 12px 25px;
         font-size: 15px;
       }
+
+      .transaction-item {
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .transaction-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+      }
+
+      .transaction-amount {
+        font-size: 13px;
+      }
+
+      .transaction-details {
+        font-size: 11px;
+      }
+
+      .transaction-status {
+        font-size: 8px;
+        padding: 1px 5px;
+      }
     }
   </style>
 </head>
 
 <body>
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <i class="fas fa-bolt me-2"></i>Flash Dashboard
+  <nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="/img/logo.png" alt="Flash" height="30" class="me-2">
+        Flash
       </a>
       <div class="navbar-nav ms-auto">
-        <span class="navbar-text me-3" id="userGreeting">Welcome, Demo User</span>
-        <button class="btn btn-outline-danger btn-sm" onclick="logout()">
-          <i class="fas fa-sign-out-alt me-1"></i>Logout
-        </button>
+        <div class="d-flex align-items-center">
+          <div class="network-status">
+            <div class="status-dot"></div>
+            <span>Aptos Devnet</span>
+          </div>
+          <div class="dropdown me-3">
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle me-1"></i>
+              <span id="currentAccountName">Alice Johnson</span>
+    </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+              <li><a class="dropdown-item" href="#" onclick="switchAccount(0)">
+                <i class="fas fa-user me-2"></i>Alice Johnson
+                <small class="d-block text-muted">Balance: $12,450.00</small>
+              </a></li>
+              <li><a class="dropdown-item" href="#" onclick="switchAccount(1)">
+                <i class="fas fa-user me-2"></i>Bob Martinez
+                <small class="d-block text-muted">Balance: $8,750.00</small>
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-primary" href="#" onclick="showAccountDetails()">
+                <i class="fas fa-info-circle me-2"></i>View Account Details
+              </a></li>
+            </ul>
+          </div>
+          <span class="text-dark me-3" id="userDisplay">
+            <i class="fas fa-user-circle me-1"></i>
+            Demo User
+          </span>
+          <button class="btn btn-sm btn-outline-secondary" onclick="logout()">
+            <i class="fas fa-sign-out-alt me-1"></i>
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   </nav>
@@ -625,7 +835,7 @@
       <div class="user-details">
         <h5><i class="fas fa-user me-2"></i><span id="userName">Demo User</span></h5>
         <small><i class="fas fa-envelope me-1"></i><span id="userEmail">demo@flashsettle.com</span></small>
-        <small class="d-block"><i class="fas fa-wallet me-1"></i>Wallet: 0x8ea67e...c71b</small>
+        <small class="d-block"><i class="fas fa-wallet me-1"></i>Wallet: <span class="wallet-address">0x8ea67e...c71b</span></small>
       </div>
       <div class="balance-info">
         <h4 id="accountBalance">$12,450.00</h4>
@@ -640,33 +850,41 @@
         <div class="stat-icon blue">
           <i class="fas fa-paper-plane"></i>
         </div>
-        <h6>Total Sent</h6>
-        <div class="stat-value" id="totalSent">$8,240</div>
-        <div class="stat-subtitle" id="totalTransactions">12 transactions</div>
+        <div class="stat-content">
+          <h6>Total Sent</h6>
+          <div class="stat-value" id="totalSent">$8,240</div>
+          <div class="stat-subtitle" id="totalTransactions">12 transactions</div>
+        </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon cyan">
           <i class="fas fa-clock"></i>
         </div>
-        <h6>Avg. Settlement</h6>
-        <div class="stat-value" id="avgSettlement">0.8s</div>
-        <div class="stat-subtitle">Lightning fast</div>
+        <div class="stat-content">
+          <h6>Avg. Settlement</h6>
+          <div class="stat-value" id="avgSettlement">0.8s</div>
+          <div class="stat-subtitle">Lightning fast</div>
+        </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon orange">
           <i class="fas fa-percentage"></i>
         </div>
-        <h6>Total Fees</h6>
-        <div class="stat-value" id="totalFees">$12.40</div>
-        <div class="stat-subtitle">0.15% average</div>
+        <div class="stat-content">
+          <h6>Total Fees</h6>
+          <div class="stat-value" id="totalFees">$12.40</div>
+          <div class="stat-subtitle">0.15% average</div>
+        </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon teal">
           <i class="fas fa-globe"></i>
         </div>
-        <h6>Countries</h6>
-        <div class="stat-value">8</div>
-        <div class="stat-subtitle">Global reach</div>
+        <div class="stat-content">
+          <h6>Countries</h6>
+          <div class="stat-value">8</div>
+          <div class="stat-subtitle">Global reach</div>
+        </div>
       </div>
     </div>
 
@@ -677,7 +895,7 @@
         <div class="section-header">
           <i class="fas fa-paper-plane"></i>
           <h5>Send Cross-Border Payment</h5>
-        </div>
+          </div>
         <div class="section-body" style="position: relative;">
           <div class="loading-overlay" id="paymentLoading">
             <div class="text-center">
@@ -688,10 +906,10 @@
           </div>
 
           <form id="paymentForm">
-            <div class="row mb-3">
+              <div class="row mb-3">
               <div class="col-6">
                 <label for="amount" class="form-label">Amount to Send</label>
-                <div class="input-group">
+                  <div class="input-group">
                   <input type="number" min="1" step="0.01" class="form-control amount-input" id="amount"
                     placeholder="100" value="100" required>
                   <select class="form-select currency-select" id="sourceCurrency">
@@ -699,51 +917,51 @@
                     <option value="EUR">🇪🇺 EUR</option>
                     <option value="GBP">🇬🇧 GBP</option>
                     <option value="USDC">💰 USDC</option>
-                  </select>
+                    </select>
+                  </div>
                 </div>
-              </div>
               <div class="col-6">
-                <label class="form-label">Recipient Gets</label>
-                <div class="input-group">
+                  <label class="form-label">Recipient Gets</label>
+                  <div class="input-group">
                   <input type="text" class="form-control amount-input" id="convertedAmount" value="94.52" readonly>
                   <select class="form-select currency-select" id="targetCurrency">
                     <option value="USD">🇺🇸 USD</option>
                     <option value="EUR" selected>🇪🇺 EUR</option>
                     <option value="GBP">🇬🇧 GBP</option>
                     <option value="USDC">💰 USDC</option>
-                  </select>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div class="mb-3">
+              
+              <div class="mb-3">
               <label for="recipientAddress" class="form-label">Recipient Blockchain Address</label>
-              <input type="text" class="form-control" id="recipientAddress"
-                value="0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b" required>
-              <div class="form-text">Aptos blockchain address of the recipient</div>
-            </div>
-
+                <input type="text" class="form-control" id="recipientAddress" 
+                  value="0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b" required>
+                <div class="form-text">Aptos blockchain address of the recipient</div>
+              </div>
+              
             <div class="info-grid">
               <div class="info-item">
                 <label for="fee" class="form-label">Network Fee</label>
                 <input type="text" class="form-control" id="fee" readonly value="$0.50 (0.5%)">
-              </div>
+                </div>
               <div class="info-item">
                 <label for="estimatedTime" class="form-label">Settlement Time</label>
-                <input type="text" class="form-control" id="estimatedTime" readonly value="< 1 second">
-              </div>
+                  <input type="text" class="form-control" id="estimatedTime" readonly value="< 1 second">
+                </div>
               <div class="info-item">
                 <label for="exchangeRate" class="form-label">Exchange Rate</label>
                 <input type="text" class="form-control" id="exchangeRate" readonly value="1 USD = 0.95 EUR">
+                </div>
               </div>
-            </div>
-
+              
             <button class="btn btn-primary w-100" type="submit" id="sendMoneyBtn">
               <i class="fas fa-paper-plane me-2"></i>Send Payment via Flash
-            </button>
-          </form>
+                </button>
+            </form>
+          </div>
         </div>
-      </div>
 
       <!-- Recent Transactions Section -->
       <div class="section-card">
@@ -755,8 +973,8 @@
           <!-- Transactions will be rendered here -->
         </div>
       </div>
+      </div>
     </div>
-  </div>
 
   <!-- Success Modal -->
   <div class="modal-overlay" id="successModal">
@@ -765,22 +983,22 @@
         <button class="modal-close" onclick="closeSuccessModal()">&times;</button>
         <div class="success-icon">
           <i class="fas fa-check"></i>
-        </div>
+          </div>
         <h2 class="modal-title">Payment Successful!</h2>
         <p class="modal-subtitle">Transaction confirmed on Aptos blockchain</p>
       </div>
       <div class="modal-body">
         <div class="transaction-summary" id="transactionSummary">
           <!-- Summary will be populated by JavaScript -->
-        </div>
-
+            </div>
+            
         <details>
           <summary style="cursor: pointer; color: #667eea; font-weight: 600; margin-bottom: 15px;">
             <i class="fas fa-code me-1"></i> View Transaction Details
           </summary>
           <div class="transaction-details-modal" id="transactionDetailsModal"></div>
         </details>
-
+        
         <div class="modal-actions">
           <button class="btn-modal btn-primary-modal" onclick="newTransaction()">
             <i class="fas fa-plus me-2"></i>Send Another Payment
@@ -790,62 +1008,199 @@
           </button>
         </div>
       </div>
+              </div>
+            </div>
+            
+  <!-- Account Details Modal -->
+  <div class="modal-overlay" id="accountModal">
+    <div class="modal-content">
+      <div class="modal-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+        <button class="modal-close" onclick="closeAccountModal()" style="color: white;">&times;</button>
+        <div class="success-icon" style="background: white; color: #667eea;">
+          <i class="fas fa-wallet"></i>
+            </div>
+        <h2 class="modal-title" style="color: white;">Account Details</h2>
+        <p class="modal-subtitle" style="color: rgba(255,255,255,0.9);">Devnet Demo Account</p>
+          </div>
+      <div class="modal-body">
+        <div class="transaction-summary">
+          <div class="summary-row">
+            <span class="summary-label">Account Name</span>
+            <span class="summary-value" id="modalAccountName">Demo Account 1</span>
+        </div>
+          <div class="summary-row">
+            <span class="summary-label">Wallet Address</span>
+            <span class="summary-value" style="font-family: monospace; font-size: 11px; word-break: break-all;" id="modalWalletAddress">
+              0x3471e1cd4a815884750224f6362afc93fff815798944149cb0692ad19a5c642e
+            </span>
+      </div>
+          <div class="summary-row">
+            <span class="summary-label">Network</span>
+            <span class="summary-value">
+              <span class="badge bg-info">Aptos Devnet</span>
+            </span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Account Type</span>
+            <span class="summary-value">Demo (Hackathon)</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Current Balance</span>
+            <span class="summary-value" id="modalBalance" style="color: #28a745; font-weight: 700;">$12,450.00</span>
+    </div>
+  </div>
+        
+        <div class="alert alert-info mt-3" style="background: #e3f2fd; border: 1px solid #90caf9;">
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>Demo Mode:</strong> This is a devnet account for hackathon demonstration. Transactions are real on Aptos devnet but use test tokens.
+        </div>
+        
+        <div class="text-center mt-3">
+          <button class="btn btn-sm btn-outline-primary" onclick="copyWalletAddress()">
+            <i class="fas fa-copy me-1"></i>Copy Address
+          </button>
+          <a href="https://explorer.aptoslabs.com/account/0x3471e1cd4a815884750224f6362afc93fff815798944149cb0692ad19a5c642e?network=devnet" 
+             target="_blank" class="btn btn-sm btn-outline-secondary ms-2" id="accountExplorerLink">
+            <i class="fas fa-external-link-alt me-1"></i>View on Explorer
+          </a>
+        </div>
+        
+        <div class="modal-actions mt-4">
+          <button class="btn-modal btn-secondary-modal" onclick="closeAccountModal()">
+            <i class="fas fa-times me-2"></i>Close
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
+
+
   <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
   <script>
-    // --- User stats and transactions state ---
-    let userStats = {
-      balance: 12450.00,
-      growth: 2.5,
-      totalSent: 8240.00,
-      totalTransactions: 12,
-      totalFees: 12.40,
-      avgSettlement: 0.8,
-      transactions: [
-        {
-          amount: 250,
-          source: 'USD',
-          target: 'EUR',
-          status: 'Completed',
-          to: '0x8ea67...c71b',
-          time: '2 hours ago',
-          fee: 1.25
-        },
-        {
-          amount: 500,
-          source: 'USDC',
-          target: 'USD',
-          status: 'Processing',
-          to: '0x1234...5678',
-          time: '1 day ago',
-          fee: 2.50
-        },
-        {
-          amount: 75,
-          source: 'EUR',
-          target: 'GBP',
-          status: 'Completed',
-          to: '0xabcd...efgh',
-          time: '3 days ago',
-          fee: 0.38
-        }
-      ]
-    };
+    // --- Demo Accounts Setup ---
+    const demoAccounts = [
+      {
+        name: 'Alice Johnson',
+        email: 'alice@flash.demo',
+                    walletAddress: '0x3471e1cd4a815884750224f6362afc93fff815798944149cb0692ad19a5c642e',
+        balance: 12450.00,
+        growth: 2.5,
+        totalSent: 8240.00,
+        totalTransactions: 12,
+        totalFees: 12.40,
+        avgSettlement: 0.8,
+        transactions: [
+          {
+            amount: 250,
+            source: 'USD',
+            target: 'EUR',
+            status: 'Completed',
+            to: '0x1ee2...12f8', // Bob's Account
+            time: '2 hours ago',
+            fee: 1.25
+          },
+          {
+            amount: 500,
+            source: 'USDC',
+            target: 'USD',
+            status: 'Completed',
+            to: '0x1ee2...12f8', // Bob's Account
+            time: '1 day ago',
+            fee: 2.50
+          },
+          {
+            amount: 75,
+            source: 'EUR',
+            target: 'GBP',
+            status: 'Completed',
+            to: '0xabcd...efgh',
+            time: '3 days ago',
+            fee: 0.38
+          }
+        ]
+      },
+      {
+        name: 'Bob Martinez',
+        email: 'bob@flash.demo',
+                    walletAddress: '0x1ee29ecf865fb3930f268e0eda127e0b7d532513e3d6f9ff498596933b1812f8',
+        balance: 8750.00,
+        growth: 1.8,
+        totalSent: 5320.00,
+        totalTransactions: 8,
+        totalFees: 8.50,
+        avgSettlement: 0.9,
+        transactions: [
+          {
+            amount: 180,
+            source: 'EUR',
+            target: 'USD',
+            status: 'Completed',
+            to: '0x3471...642e', // Alice's Account
+            time: '5 hours ago',
+            fee: 0.90
+          },
+          {
+            amount: 320,
+            source: 'USD',
+            target: 'USDC',
+            status: 'Completed',
+            to: '0x3471...642e', // Alice's Account
+            time: '2 days ago',
+            fee: 1.60
+          }
+        ]
+      }
+    ];
+
+    // Current active account
+    let currentAccountIndex = 0;
+    let userStats = { ...demoAccounts[0] };
 
     // --- Local Storage Persistence ---
     function saveUserStats() {
-      localStorage.setItem('flash_userStats', JSON.stringify(userStats));
+      const key = `flash_userStats_${currentAccountIndex}`;
+      localStorage.setItem(key, JSON.stringify(userStats));
     }
+    
     function loadUserStats() {
-      const saved = localStorage.getItem('flash_userStats');
+      const key = `flash_userStats_${currentAccountIndex}`;
+      const saved = localStorage.getItem(key);
       if (saved) {
         userStats = JSON.parse(saved);
+      } else {
+        userStats = { ...demoAccounts[currentAccountIndex] };
       }
     }
-    // Load stats from localStorage if available
-    loadUserStats();
+
+    // Switch between demo accounts
+    function switchAccount(index) {
+      currentAccountIndex = index;
+      loadUserStats();
+      
+      // Update UI
+      document.getElementById('currentAccountName').textContent = userStats.name;
+      document.getElementById('userDisplay').innerHTML = `<i class="fas fa-user-circle me-1"></i>${userStats.email}`;
+      
+      // Update user info card
+      document.getElementById('userName').textContent = userStats.name.split(' ')[0]; // Just first name
+      document.getElementById('userEmail').textContent = userStats.email;
+      
+      // Update wallet address in user info card
+      const walletDisplay = userStats.walletAddress.slice(0, 8) + '...' + userStats.walletAddress.slice(-4);
+      document.querySelector('.wallet-address').textContent = walletDisplay;
+      
+      // Re-render stats and transactions
+      renderStats();
+      renderTransactions();
+      
+      // Update recipient field to the other account's address
+      const otherAccount = demoAccounts[1 - index];
+      document.getElementById('recipientAddress').value = otherAccount.walletAddress;
+      
+      // Show notification
+      showAccountSwitchNotification(userStats.name);
+    }
 
     // Render stats and transactions
     function renderStats() {
@@ -855,43 +1210,77 @@
       document.getElementById('totalTransactions').textContent = `${userStats.totalTransactions} transactions`;
       document.getElementById('totalFees').textContent = `$${userStats.totalFees.toFixed(2)}`;
       document.getElementById('avgSettlement').textContent = `${userStats.avgSettlement}s`;
+      
+      // Update dropdown balances
+      document.querySelectorAll('.dropdown-item small').forEach((el, idx) => {
+        if (idx < demoAccounts.length) {
+          const account = currentAccountIndex === idx ? userStats : demoAccounts[idx];
+          el.textContent = `Balance: $${account.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+        }
+      });
     }
 
     function renderTransactions() {
       const container = document.getElementById('recentTransactions');
-      if (!userStats.transactions.length) {
-        container.innerHTML = '<div class="text-muted">No transactions yet.</div>';
+      if (!userStats.transactions || !userStats.transactions.length) {
+        container.innerHTML = '<div class="text-muted text-center py-3">No transactions yet. Send your first payment!</div>';
         return;
       }
-      container.innerHTML = userStats.transactions.slice(0, 5).map(tx => `
+      container.innerHTML = userStats.transactions.slice(0, 5).map(tx => {
+        // Get initials or icon for avatar
+        const getAvatarContent = (transaction) => {
+          if (transaction.source === 'USD') return '$';
+          if (transaction.source === 'EUR') return '€';
+          if (transaction.source === 'GBP') return '£';
+          if (transaction.source === 'USDC') return 'U';
+          return transaction.source.charAt(0);
+        };
+        
+        return `
           <div class="transaction-item">
-            <div class="transaction-header">
-              <span class="transaction-amount">$${tx.amount.toFixed(2)} ${tx.source} → ${tx.target}</span>
-              <span class="transaction-status status-${tx.status.toLowerCase()}">${tx.status}</span>
+            <div class="transaction-avatar ${tx.status.toLowerCase()}">
+              ${getAvatarContent(tx)}
             </div>
-            <div class="transaction-details">
-              <div>To: ${tx.to}</div>
-              <div>${tx.time} • Fee: $${tx.fee.toFixed(2)}</div>
+            <div class="transaction-content">
+              <div class="transaction-header">
+                <span class="transaction-amount">$${tx.amount.toFixed(2)} ${tx.source} → ${tx.target}</span>
+                <span class="transaction-status status-${tx.status.toLowerCase()}">${tx.status}</span>
+              </div>
+              <div class="transaction-details">
+                <div>To: ${tx.to}</div>
+                <div>${tx.time} • Fee: $${tx.fee.toFixed(2)}</div>
+              </div>
             </div>
           </div>
-        `).join('');
+        `;
+      }).join('');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       // Check authentication
       const token = localStorage.getItem('flashsettle_token');
       const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
-
-      if (!token) {
-        window.location.href = '/login.html';
-        return;
-      }
-
-      // Display user info
-      document.getElementById('userName').textContent = user.name || 'Demo User';
-      document.getElementById('userEmail').textContent = user.email || 'demo@flashsettle.com';
-      document.getElementById('userGreeting').textContent = `Welcome, ${user.name || 'Demo User'}`;
-
+        
+        if (!token) {
+          window.location.href = '/login.html';
+          return;
+        }
+        
+      // Load current account
+      loadUserStats();
+      
+      // Set initial UI state
+      document.getElementById('currentAccountName').textContent = userStats.name;
+      document.getElementById('userDisplay').innerHTML = `<i class="fas fa-user-circle me-1"></i>${userStats.email}`;
+      
+      // Update user info card
+      document.getElementById('userName').textContent = userStats.name.split(' ')[0];
+      document.getElementById('userEmail').textContent = userStats.email;
+      
+      // Update wallet address
+      const walletDisplay = userStats.walletAddress.slice(0, 8) + '...' + userStats.walletAddress.slice(-4);
+      document.querySelector('.wallet-address').textContent = walletDisplay;
+      
       // Form elements
       const paymentForm = document.getElementById('paymentForm');
       const paymentLoading = document.getElementById('paymentLoading');
@@ -902,17 +1291,21 @@
       // Render initial stats and transactions
       renderStats();
       renderTransactions();
+      
+      // Set recipient to other account by default
+      const otherAccount = demoAccounts[1 - currentAccountIndex];
+      document.getElementById('recipientAddress').value = otherAccount.walletAddress;
 
       // Update converted amount and fees
       function updateCalculations() {
         const amount = parseFloat(document.getElementById('amount').value) || 0;
         const sourceCurrency = document.getElementById('sourceCurrency').value;
         const targetCurrency = document.getElementById('targetCurrency').value;
-
+        
         // Calculate fee (0.5%)
         const fee = amount * 0.005;
         document.getElementById('fee').value = `$${fee.toFixed(2)} (0.5%)`;
-
+        
         // Mock exchange rates
         const rates = {
           'USD-EUR': 0.95, 'USD-GBP': 0.82, 'USD-USDC': 1.00,
@@ -920,25 +1313,25 @@
           'GBP-USD': 1.22, 'GBP-EUR': 1.16, 'GBP-USDC': 1.22,
           'USDC-USD': 1.00, 'USDC-EUR': 0.95, 'USDC-GBP': 0.82
         };
-
+        
         const rateKey = `${sourceCurrency}-${targetCurrency}`;
         const rate = rates[rateKey] || 1;
         const convertedAmount = (amount - fee) * rate;
-
+        
         document.getElementById('convertedAmount').value = convertedAmount.toFixed(2);
         document.getElementById('exchangeRate').value = `1 ${sourceCurrency} = ${rate} ${targetCurrency}`;
       }
-
+      
       // Event listeners for calculations
       document.getElementById('amount').addEventListener('input', updateCalculations);
       document.getElementById('sourceCurrency').addEventListener('change', updateCalculations);
       document.getElementById('targetCurrency').addEventListener('change', updateCalculations);
-
+      
       // Payment form submission
       paymentForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-
-        const amount = document.getElementById('amount').value;
+        
+        const amount = parseFloat(document.getElementById('amount').value);
         const sourceCurrency = document.getElementById('sourceCurrency').value;
         const targetCurrency = document.getElementById('targetCurrency').value;
         const recipient = document.getElementById('recipientAddress').value;
@@ -954,7 +1347,7 @@
         
         // Show loading
         paymentLoading.style.display = 'flex';
-
+        
         try {
           const response = await fetch('/api/v1/payments', {
             method: 'POST',
@@ -969,9 +1362,9 @@
               recipient
             })
           });
-
+          
           const data = await response.json();
-
+          
           if (response.ok && data.success) {
             // Show success modal and update stats/transactions
             showSuccessModal({
@@ -993,23 +1386,59 @@
             userStats.totalSent += parseFloat(amount);
             userStats.totalFees += fee;
             userStats.totalTransactions += 1;
+            
+            // Add transaction to history
+            const recipientDisplay = recipient.slice(0, 6) + '...' + recipient.slice(-4);
             userStats.transactions.unshift({
               amount: parseFloat(amount),
               source: sourceCurrency,
               target: targetCurrency,
               status: 'Completed',
-              to: recipient.slice(0, 6) + '...' + recipient.slice(-4),
+              to: recipientDisplay,
               time: 'just now',
               fee: fee
             });
+            
+            // If sending to the other demo account, update their balance too
+            const otherAccountIndex = 1 - currentAccountIndex;
+            if (recipient.toLowerCase() === demoAccounts[otherAccountIndex].walletAddress.toLowerCase()) {
+              const otherAccountKey = `flash_userStats_${otherAccountIndex}`;
+              let otherAccountStats = localStorage.getItem(otherAccountKey);
+              if (otherAccountStats) {
+                otherAccountStats = JSON.parse(otherAccountStats);
+          } else {
+                otherAccountStats = { ...demoAccounts[otherAccountIndex] };
+              }
+              
+              // Add received amount to other account
+              const receivedAmount = parseFloat(recipientGets);
+              otherAccountStats.balance += receivedAmount;
+              
+              // Add to their transaction history
+              const senderDisplay = userStats.walletAddress.slice(0, 6) + '...' + userStats.walletAddress.slice(-4);
+              otherAccountStats.transactions.unshift({
+                amount: receivedAmount,
+                source: targetCurrency,
+                target: targetCurrency,
+                status: 'Received',
+                to: senderDisplay,
+                time: 'just now',
+                fee: 0
+              });
+              
+              localStorage.setItem(otherAccountKey, JSON.stringify(otherAccountStats));
+            }
+            
             saveUserStats(); // Save to localStorage
             renderStats();
             renderTransactions();
+            
+
 
           } else {
             throw new Error(data.error || 'Payment failed');
           }
-
+          
         } catch (error) {
           console.error('Payment error:', error);
           alert(`Payment failed: ${error.message}`);
@@ -1017,75 +1446,181 @@
           paymentLoading.style.display = 'none';
         }
       });
-
+      
       // Initialize calculations
       updateCalculations();
     });
-
+    
     // Show success modal
     function showSuccessModal(txData) {
       // Populate transaction summary
       const summaryHTML = `
-          <div class="summary-row">
-            <span class="summary-label">Amount Sent</span>
-            <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Recipient Gets</span>
-            <span class="summary-value">${txData.recipientGets} ${txData.targetCurrency}</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Network Fee</span>
-            <span class="summary-value">${txData.fee}</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Transaction Hash</span>
-            <span class="summary-value" style="font-family: monospace; font-size: 12px; word-break: break-all;">${txData.transactionHash}</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">Total Cost</span>
-            <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
-          </div>
-        `;
-
+        <div class="summary-row">
+          <span class="summary-label">Amount Sent</span>
+          <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Recipient Gets</span>
+          <span class="summary-value">${txData.recipientGets} ${txData.targetCurrency}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Network Fee</span>
+          <span class="summary-value">${txData.fee}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Transaction Hash</span>
+          <span class="summary-value" style="font-family: monospace; font-size: 12px; word-break: break-all;">${txData.transactionHash}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Network</span>
+          <span class="summary-value">
+            <span class="badge bg-success">Aptos Devnet</span>
+            <a href="https://explorer.aptoslabs.com/txn/${txData.transactionHash}?network=devnet" target="_blank" class="btn btn-sm btn-outline-primary ms-2" style="font-size: 10px;">
+              <i class="fas fa-external-link-alt me-1"></i>View on Explorer
+            </a>
+          </span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Total Cost</span>
+          <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
+        </div>
+      `;
+      
       document.getElementById('transactionSummary').innerHTML = summaryHTML;
       document.getElementById('transactionDetailsModal').textContent = JSON.stringify(txData, null, 2);
-
+      
       // Show modal
       document.getElementById('successModal').style.display = 'flex';
       document.body.style.overflow = 'hidden'; // Prevent background scrolling
     }
-
+    
     // Close success modal
     function closeSuccessModal() {
       document.getElementById('successModal').style.display = 'none';
       document.body.style.overflow = 'auto'; // Restore scrolling
     }
-
+    
     // Close modal when clicking outside
-    document.getElementById('successModal').addEventListener('click', function (e) {
+    document.getElementById('successModal').addEventListener('click', function(e) {
       if (e.target === this) {
         closeSuccessModal();
       }
     });
-
+    
     // New transaction function
     function newTransaction() {
       closeSuccessModal();
       document.getElementById('paymentForm').reset();
       document.getElementById('amount').value = '100';
-      document.getElementById('recipientAddress').value = '0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b';
+      
+      // Set recipient to other account
+      const otherAccount = demoAccounts[1 - currentAccountIndex];
+      document.getElementById('recipientAddress').value = otherAccount.walletAddress;
+      
       document.getElementById('amount').dispatchEvent(new Event('input'));
     }
-
+    
     // Logout function
     function logout() {
       localStorage.removeItem('flashsettle_token');
       localStorage.removeItem('flashsettle_user');
-      localStorage.removeItem('flash_userStats'); // Clear stats on logout
       window.location.href = '/login.html';
+    }
+
+    // Account Details Modal
+    function showAccountDetails() {
+      document.getElementById('modalAccountName').textContent = userStats.name;
+      document.getElementById('modalWalletAddress').textContent = userStats.walletAddress;
+      document.getElementById('modalBalance').textContent = `$${userStats.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      
+      // Update explorer link
+      const explorerLink = document.getElementById('accountExplorerLink');
+      explorerLink.href = `https://explorer.aptoslabs.com/account/${userStats.walletAddress}?network=devnet`;
+      
+      document.getElementById('accountModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAccountModal() {
+      document.getElementById('accountModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    function copyWalletAddress() {
+      const walletAddress = document.getElementById('modalWalletAddress').textContent;
+      navigator.clipboard.writeText(walletAddress).then(() => {
+        // Show success feedback
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+        btn.classList.add('btn-success');
+        btn.classList.remove('btn-outline-primary');
+        
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove('btn-success');
+          btn.classList.add('btn-outline-primary');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy wallet address: ', err);
+        alert('Failed to copy wallet address.');
+      });
+    }
+    
+    // Close account modal when clicking outside
+    document.getElementById('accountModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAccountModal();
+      }
+    });
+    
+
+     
+     // Account switch notification
+     function showAccountSwitchNotification(accountName) {
+       // Create notification element
+       const notification = document.createElement('div');
+       notification.style.cssText = `
+         position: fixed;
+         top: 80px;
+         right: 20px;
+         background: linear-gradient(135deg, #28a745, #20c997);
+         color: white;
+         padding: 12px 20px;
+         border-radius: 8px;
+         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+         z-index: 1001;
+         font-weight: 600;
+         animation: slideInRight 0.3s ease-out;
+       `;
+       notification.innerHTML = `
+         <i class="fas fa-user-check me-2"></i>
+         Switched to ${accountName}
+       `;
+       
+       // Add animation styles
+       const style = document.createElement('style');
+       style.textContent = `
+         @keyframes slideInRight {
+           from { transform: translateX(100%); opacity: 0; }
+           to { transform: translateX(0); opacity: 1; }
+         }
+       `;
+       document.head.appendChild(style);
+       
+       document.body.appendChild(notification);
+       
+       // Remove after 3 seconds
+       setTimeout(() => {
+         notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+         setTimeout(() => {
+           if (notification.parentNode) {
+             notification.parentNode.removeChild(notification);
+           }
+         }, 300);
+       }, 3000);
     }
   </script>
 </body>
 
-</html>
+</html> 
