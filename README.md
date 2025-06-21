@@ -19,7 +19,7 @@ These inefficiencies cost the global economy billions annually and disproportion
 
 ## 🌟 Solution
 
-Aptos Flash is a next-generation payment infrastructure that enables **instant, low-cost cross-border settlements** using Aptos-native stablecoins, sponsored gas transactions, and AI-driven FX optimization.
+Flash is a next-generation payment infrastructure that enables **instant, low-cost cross-border settlements** using Aptos-native stablecoins, sponsored gas transactions, and AI-driven FX optimization.
 
 ### Core Features
 
