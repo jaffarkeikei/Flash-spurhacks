@@ -117,6 +117,10 @@ npx sequelize-cli db:create
 npx sequelize-cli db:migrate
 
 # Start development server
+./start.sh
+
+# or 
+
 npm run dev
 ```
 
