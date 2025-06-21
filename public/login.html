@@ -270,9 +270,6 @@
                         <button type="button" class="btn btn-secondary me-2" id="retakeBtn" style="display: none;">
                             <i class="fas fa-redo me-2"></i>Retake
                         </button>
-                        <button type="button" class="btn btn-success" id="savePhotoBtn" style="display: none;">
-                            <i class="fas fa-save me-2"></i>Save Photo
-                        </button>
                     </div>
                     <div class="camera-status mt-3">
                         <div class="alert alert-info" id="cameraStatus">
@@ -368,7 +365,6 @@
             const capturedImage = document.getElementById('capturedImage');
             const captureBtn = document.getElementById('captureBtn');
             const retakeBtn = document.getElementById('retakeBtn');
-            const savePhotoBtn = document.getElementById('savePhotoBtn');
             const cameraStatus = document.getElementById('cameraStatus');
             
             let stream = null;
@@ -408,7 +404,6 @@
                 capturedImage.style.display = 'none';
                 captureBtn.style.display = 'inline-block';
                 retakeBtn.style.display = 'none';
-                savePhotoBtn.style.display = 'none';
                 cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
             });
             
@@ -432,9 +427,8 @@
                 // Update buttons
                 captureBtn.style.display = 'none';
                 retakeBtn.style.display = 'inline-block';
-                savePhotoBtn.style.display = 'inline-block';
                 
-                cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo captured! Review and save.';
+                cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo captured! You can retake if needed.';
             });
             
             // Retake photo
@@ -443,79 +437,8 @@
                 capturedImage.style.display = 'none';
                 captureBtn.style.display = 'inline-block';
                 retakeBtn.style.display = 'none';
-                savePhotoBtn.style.display = 'none';
                 capturedPhotoData = null;
                 cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
-            });
-            
-            // Save photo
-            savePhotoBtn.addEventListener('click', async function() {
-                if (!capturedPhotoData) {
-                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>No photo to save!';
-                    return;
-                }
-                
-                try {
-                    // Show saving status
-                    cameraStatus.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading photo...';
-                    savePhotoBtn.disabled = true;
-                    
-                    console.log('Starting photo upload...');
-                    console.log('Captured photo data length:', capturedPhotoData.length);
-                    
-                    // Convert base64 to blob
-                    const base64Data = capturedPhotoData.split(',')[1];
-                    const byteCharacters = atob(base64Data);
-                    const byteNumbers = new Array(byteCharacters.length);
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-                    const byteArray = new Uint8Array(byteNumbers);
-                    const blob = new Blob([byteArray], { type: 'image/jpeg' });
-                    
-                    console.log('Blob created:', blob);
-                    console.log('Blob size:', blob.size);
-                    console.log('Blob type:', blob.type);
-                    
-                    // Create FormData for upload
-                    const formData = new FormData();
-                    formData.append('photo', blob, 'user_photo.jpg');
-                    
-                    console.log('FormData created, uploading...');
-                    
-                    // Upload to server
-                    const uploadResponse = await fetch('/api/v1/photos/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    console.log('Upload response status:', uploadResponse.status);
-                    
-                    const uploadResult = await uploadResponse.json();
-                    console.log('Upload result:', uploadResult);
-                    
-                    if (uploadResponse.ok && uploadResult.success) {
-                        // Update status
-                        cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo uploaded successfully! Redirecting to dashboard...';
-                        
-                        // Store photo info in localStorage (optional)
-                        localStorage.setItem('flashsettle_user_photo', JSON.stringify(uploadResult.data));
-                        
-                        // Close modal and redirect after short delay
-                        setTimeout(() => {
-                            cameraModal.hide();
-                            window.location.href = '/dashboard.html';
-                        }, 2000);
-                        
-                    } else {
-                        throw new Error(uploadResult.error || 'Upload failed');
-                    }
-                    
-                } catch (error) {
-                    console.error('Save photo error:', error);
-                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Error uploading photo. Please try again.';
-                    savePhotoBtn.disabled = false;
-                }
             });
         });
     </script>
