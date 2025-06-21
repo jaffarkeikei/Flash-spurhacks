@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,7 @@
       margin: 0;
       padding: 0;
     }
-    
+  
     .navbar {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
@@ -22,13 +23,13 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       padding: 10px 0;
     }
-    
+  
     .navbar-brand {
       font-weight: bold;
       color: #667eea !important;
       font-size: 20px;
     }
-    
+  
     .main-container {
       padding: 20px;
       max-width: 1400px;
@@ -36,7 +37,7 @@
       height: calc(100vh - 70px);
       overflow-y: auto;
     }
-    
+  
     .user-info-card {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
@@ -47,44 +48,44 @@
       justify-content: space-between;
       align-items: center;
     }
-    
+  
     .user-details h5 {
       margin: 0 0 8px 0;
       font-weight: 600;
       font-size: 20px;
     }
-    
+  
     .user-details small {
       opacity: 0.9;
       font-size: 14px;
       display: block;
       margin-bottom: 3px;
     }
-    
+  
     .balance-info {
       text-align: right;
     }
-    
+  
     .balance-info h4 {
       margin: 0;
       font-weight: 700;
       font-size: 28px;
     }
-    
+  
     .balance-info small {
       opacity: 0.9;
       font-size: 13px;
       display: block;
       margin-top: 3px;
     }
-    
+  
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
       margin-bottom: 25px;
     }
-    
+  
     .stat-card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
@@ -93,11 +94,11 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease;
     }
-    
+  
     .stat-card:hover {
       transform: translateY(-2px);
     }
-    
+  
     .stat-icon {
       width: 50px;
       height: 50px;
@@ -109,12 +110,23 @@
       font-size: 20px;
       color: white;
     }
-    
-    .stat-icon.blue { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .stat-icon.cyan { background: linear-gradient(135deg, #17a2b8, #20c997); }
-    .stat-icon.orange { background: linear-gradient(135deg, #fd7e14, #ffc107); }
-    .stat-icon.teal { background: linear-gradient(135deg, #20c997, #17a2b8); }
-    
+  
+    .stat-icon.blue {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+  
+    .stat-icon.cyan {
+      background: linear-gradient(135deg, #17a2b8, #20c997);
+    }
+  
+    .stat-icon.orange {
+      background: linear-gradient(135deg, #fd7e14, #ffc107);
+    }
+  
+    .stat-icon.teal {
+      background: linear-gradient(135deg, #20c997, #17a2b8);
+    }
+  
     .stat-card h6 {
       margin: 0 0 8px 0;
       font-size: 13px;
@@ -123,20 +135,20 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+  
     .stat-value {
       font-size: 24px;
       font-weight: 700;
       color: #333;
       margin: 0;
     }
-    
+  
     .stat-subtitle {
       font-size: 12px;
       color: #888;
       margin: 8px 0 0 0;
     }
-    
+  
     .bottom-section {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -144,7 +156,7 @@
       height: calc(100vh - 420px);
       min-height: 500px;
     }
-    
+  
     .section-card {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
@@ -153,7 +165,7 @@
       display: flex;
       flex-direction: column;
     }
-    
+  
     .section-header {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
@@ -162,19 +174,19 @@
       align-items: center;
       gap: 12px;
     }
-    
+  
     .section-header h5 {
       margin: 0;
       font-weight: 600;
       font-size: 18px;
     }
-    
+  
     .section-body {
       padding: 25px;
       flex: 1;
       overflow-y: auto;
     }
-    
+  
     .form-control {
       border-radius: 10px;
       border: 2px solid #e1e5e9;
@@ -182,19 +194,19 @@
       font-size: 15px;
       transition: all 0.3s ease;
     }
-    
+  
     .form-control:focus {
       border-color: #667eea;
       box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
-    
+  
     .form-label {
       font-weight: 600;
       color: #333;
       margin-bottom: 8px;
       font-size: 14px;
     }
-    
+  
     .btn-primary {
       background: linear-gradient(135deg, #667eea, #764ba2);
       border: none;
@@ -204,37 +216,37 @@
       font-weight: 600;
       transition: all 0.3s ease;
     }
-    
+  
     .btn-primary:hover {
       transform: translateY(-1px);
       box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
     }
-    
+  
     .currency-select {
       border-radius: 0 10px 10px 0;
       border-left: none;
       max-width: 110px;
       font-size: 14px;
     }
-    
+  
     .amount-input {
       border-radius: 10px 0 0 10px;
     }
-    
+  
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 15px;
       margin-bottom: 20px;
     }
-    
+  
     .info-item .form-control {
       text-align: center;
       font-weight: 600;
       font-size: 13px;
       padding: 10px 12px;
     }
-    
+  
     .transaction-item {
       border: 1px solid #e1e5e9;
       border-radius: 10px;
@@ -242,24 +254,24 @@
       margin-bottom: 12px;
       transition: all 0.3s ease;
     }
-    
+  
     .transaction-item:hover {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transform: translateY(-1px);
     }
-    
+  
     .transaction-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
     }
-    
+  
     .transaction-amount {
       font-weight: 700;
       font-size: 15px;
     }
-    
+  
     .transaction-status {
       padding: 4px 10px;
       border-radius: 12px;
@@ -267,23 +279,23 @@
       font-weight: 600;
       text-transform: uppercase;
     }
-    
+  
     .status-completed {
       background: #d4edda;
       color: #155724;
     }
-    
+  
     .status-processing {
       background: #fff3cd;
       color: #856404;
     }
-    
+  
     .transaction-details {
       font-size: 12px;
       color: #666;
       line-height: 1.4;
     }
-    
+  
     .loading-overlay {
       display: none;
       position: absolute;
@@ -297,7 +309,7 @@
       justify-content: center;
       z-index: 10;
     }
-    
+  
     /* Modal Styles */
     .modal-overlay {
       display: none;
@@ -312,7 +324,7 @@
       align-items: center;
       justify-content: center;
     }
-    
+  
     .modal-content {
       background: white;
       border-radius: 20px;
@@ -324,18 +336,19 @@
       position: relative;
       animation: modalSlideIn 0.3s ease-out;
     }
-    
+  
     @keyframes modalSlideIn {
       from {
         opacity: 0;
         transform: translateY(-50px) scale(0.9);
       }
+  
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
       }
     }
-    
+  
     .modal-header {
       background: linear-gradient(135deg, #d4edda, #c3e6cb);
       padding: 25px;
@@ -343,7 +356,7 @@
       text-align: center;
       border-bottom: 1px solid #c3e6cb;
     }
-    
+  
     .modal-close {
       position: absolute;
       top: 15px;
@@ -361,12 +374,12 @@
       border-radius: 50%;
       transition: all 0.3s ease;
     }
-    
+  
     .modal-close:hover {
       background: rgba(0, 0, 0, 0.1);
       color: #333;
     }
-    
+  
     .success-icon {
       width: 60px;
       height: 60px;
@@ -380,43 +393,45 @@
       font-size: 24px;
       animation: successPulse 0.6s ease-out;
     }
-    
+  
     @keyframes successPulse {
       0% {
         transform: scale(0);
       }
+  
       50% {
         transform: scale(1.1);
       }
+  
       100% {
         transform: scale(1);
       }
     }
-    
+  
     .modal-title {
       margin: 0 0 8px 0;
       font-size: 24px;
       font-weight: 700;
       color: #155724;
     }
-    
+  
     .modal-subtitle {
       margin: 0;
       color: #666;
       font-size: 14px;
     }
-    
+  
     .modal-body {
       padding: 25px;
     }
-    
+  
     .transaction-summary {
       background: #f8f9fa;
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 20px;
     }
-    
+  
     .summary-row {
       display: flex;
       justify-content: space-between;
@@ -424,23 +439,23 @@
       padding: 8px 0;
       border-bottom: 1px solid #e9ecef;
     }
-    
+  
     .summary-row:last-child {
       border-bottom: none;
       font-weight: 600;
       color: #28a745;
     }
-    
+  
     .summary-label {
       color: #666;
       font-size: 14px;
     }
-    
+  
     .summary-value {
       font-weight: 600;
       color: #333;
     }
-    
+  
     .transaction-details-modal {
       background: #f8f9fa;
       border-radius: 8px;
@@ -452,13 +467,13 @@
       margin-bottom: 20px;
       border: 1px solid #e9ecef;
     }
-    
+  
     .modal-actions {
       display: flex;
       gap: 10px;
       justify-content: center;
     }
-    
+  
     .btn-modal {
       padding: 12px 25px;
       border-radius: 8px;
@@ -468,117 +483,117 @@
       border: none;
       cursor: pointer;
     }
-    
+  
     .btn-primary-modal {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
     }
-    
+  
     .btn-primary-modal:hover {
       transform: translateY(-1px);
       box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
       color: white;
     }
-    
+  
     .btn-secondary-modal {
       background: #6c757d;
       color: white;
     }
-    
+  
     .btn-secondary-modal:hover {
       background: #5a6268;
       color: white;
     }
-
+  
     /* Remove old transaction result styles */
     .transaction-result {
       display: none;
     }
-
+  
     /* Responsive Design */
     @media (max-width: 1200px) {
       .main-container {
         padding: 15px;
       }
-      
+  
       .bottom-section {
         gap: 20px;
       }
     }
-
+  
     @media (max-width: 992px) {
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-      
+  
       .bottom-section {
         grid-template-columns: 1fr;
         height: auto;
         gap: 20px;
       }
-      
+  
       .section-card {
         min-height: 400px;
       }
     }
-
+  
     @media (max-width: 768px) {
       .main-container {
         padding: 10px;
       }
-      
+  
       .user-info-card {
         flex-direction: column;
         text-align: center;
         gap: 15px;
         padding: 20px;
       }
-      
+  
       .balance-info {
         text-align: center;
       }
-      
+  
       .stats-grid {
         grid-template-columns: 1fr;
         gap: 15px;
       }
-      
+  
       .info-grid {
         grid-template-columns: 1fr;
         gap: 10px;
       }
-      
+  
       .section-body {
         padding: 20px;
       }
-      
+  
       .form-control {
         padding: 10px 14px;
         font-size: 14px;
       }
     }
-
+  
     @media (max-width: 576px) {
       .main-container {
         padding: 8px;
       }
-      
+  
       .user-info-card {
         padding: 15px;
       }
-      
+  
       .stat-card {
         padding: 20px;
       }
-      
+  
       .section-header {
         padding: 15px 20px;
       }
-      
+  
       .section-body {
         padding: 15px;
       }
-      
+  
       .btn-primary {
         padding: 12px 25px;
         font-size: 15px;
@@ -586,6 +601,7 @@
     }
   </style>
 </head>
+
 <body>
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg">
@@ -612,9 +628,9 @@
         <small class="d-block"><i class="fas fa-wallet me-1"></i>Wallet: 0x8ea67e...c71b</small>
       </div>
       <div class="balance-info">
-        <h4>$12,450.00</h4>
+        <h4 id="accountBalance">$12,450.00</h4>
         <small>Account Balance</small>
-        <small class="d-block">+2.5% this month</small>
+        <small class="d-block" id="balanceGrowth">+2.5% this month</small>
       </div>
     </div>
 
@@ -625,15 +641,15 @@
           <i class="fas fa-paper-plane"></i>
         </div>
         <h6>Total Sent</h6>
-        <div class="stat-value">$8,240</div>
-        <div class="stat-subtitle">12 transactions</div>
+        <div class="stat-value" id="totalSent">$8,240</div>
+        <div class="stat-subtitle" id="totalTransactions">12 transactions</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon cyan">
           <i class="fas fa-clock"></i>
         </div>
         <h6>Avg. Settlement</h6>
-        <div class="stat-value">0.8s</div>
+        <div class="stat-value" id="avgSettlement">0.8s</div>
         <div class="stat-subtitle">Lightning fast</div>
       </div>
       <div class="stat-card">
@@ -641,7 +657,7 @@
           <i class="fas fa-percentage"></i>
         </div>
         <h6>Total Fees</h6>
-        <div class="stat-value">$12.40</div>
+        <div class="stat-value" id="totalFees">$12.40</div>
         <div class="stat-subtitle">0.15% average</div>
       </div>
       <div class="stat-card">
@@ -670,13 +686,14 @@
               <small class="text-muted">Connecting to Aptos blockchain</small>
             </div>
           </div>
-          
+
           <form id="paymentForm">
             <div class="row mb-3">
               <div class="col-6">
                 <label for="amount" class="form-label">Amount to Send</label>
                 <div class="input-group">
-                  <input type="number" min="1" step="0.01" class="form-control amount-input" id="amount" placeholder="100" value="100" required>
+                  <input type="number" min="1" step="0.01" class="form-control amount-input" id="amount"
+                    placeholder="100" value="100" required>
                   <select class="form-select currency-select" id="sourceCurrency">
                     <option value="USD" selected>🇺🇸 USD</option>
                     <option value="EUR">🇪🇺 EUR</option>
@@ -698,14 +715,14 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="mb-3">
               <label for="recipientAddress" class="form-label">Recipient Blockchain Address</label>
-              <input type="text" class="form-control" id="recipientAddress" 
+              <input type="text" class="form-control" id="recipientAddress"
                 value="0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b" required>
               <div class="form-text">Aptos blockchain address of the recipient</div>
             </div>
-            
+
             <div class="info-grid">
               <div class="info-item">
                 <label for="fee" class="form-label">Network Fee</label>
@@ -720,7 +737,7 @@
                 <input type="text" class="form-control" id="exchangeRate" readonly value="1 USD = 0.95 EUR">
               </div>
             </div>
-            
+
             <button class="btn btn-primary w-100" type="submit" id="sendMoneyBtn">
               <i class="fas fa-paper-plane me-2"></i>Send Payment via Flash
             </button>
@@ -734,39 +751,8 @@
           <i class="fas fa-history"></i>
           <h5>Recent Transactions</h5>
         </div>
-        <div class="section-body">
-          <div class="transaction-item">
-            <div class="transaction-header">
-              <span class="transaction-amount">$250.00 USD → EUR</span>
-              <span class="transaction-status status-completed">Completed</span>
-            </div>
-            <div class="transaction-details">
-              <div>To: 0x8ea67...c71b</div>
-              <div>2 hours ago • Fee: $1.25</div>
-            </div>
-          </div>
-          
-          <div class="transaction-item">
-            <div class="transaction-header">
-              <span class="transaction-amount">$500.00 USDC → USD</span>
-              <span class="transaction-status status-processing">Processing</span>
-            </div>
-            <div class="transaction-details">
-              <div>To: 0x1234...5678</div>
-              <div>1 day ago • Fee: $2.50</div>
-            </div>
-          </div>
-          
-          <div class="transaction-item">
-            <div class="transaction-header">
-              <span class="transaction-amount">$75.00 EUR → GBP</span>
-              <span class="transaction-status status-completed">Completed</span>
-            </div>
-            <div class="transaction-details">
-              <div>To: 0xabcd...efgh</div>
-              <div>3 days ago • Fee: $0.38</div>
-            </div>
-          </div>
+        <div class="section-body" id="recentTransactions">
+          <!-- Transactions will be rendered here -->
         </div>
       </div>
     </div>
@@ -787,14 +773,14 @@
         <div class="transaction-summary" id="transactionSummary">
           <!-- Summary will be populated by JavaScript -->
         </div>
-        
+
         <details>
           <summary style="cursor: pointer; color: #667eea; font-weight: 600; margin-bottom: 15px;">
             <i class="fas fa-code me-1"></i> View Transaction Details
           </summary>
           <div class="transaction-details-modal" id="transactionDetailsModal"></div>
         </details>
-        
+
         <div class="modal-actions">
           <button class="btn-modal btn-primary-modal" onclick="newTransaction()">
             <i class="fas fa-plus me-2"></i>Send Another Payment
@@ -809,38 +795,111 @@
 
   <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // --- User stats and transactions state ---
+    let userStats = {
+      balance: 12450.00,
+      growth: 2.5,
+      totalSent: 8240.00,
+      totalTransactions: 12,
+      totalFees: 12.40,
+      avgSettlement: 0.8,
+      transactions: [
+        {
+          amount: 250,
+          source: 'USD',
+          target: 'EUR',
+          status: 'Completed',
+          to: '0x8ea67...c71b',
+          time: '2 hours ago',
+          fee: 1.25
+        },
+        {
+          amount: 500,
+          source: 'USDC',
+          target: 'USD',
+          status: 'Processing',
+          to: '0x1234...5678',
+          time: '1 day ago',
+          fee: 2.50
+        },
+        {
+          amount: 75,
+          source: 'EUR',
+          target: 'GBP',
+          status: 'Completed',
+          to: '0xabcd...efgh',
+          time: '3 days ago',
+          fee: 0.38
+        }
+      ]
+    };
+
+    // Render stats and transactions
+    function renderStats() {
+      document.getElementById('accountBalance').textContent = `$${userStats.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      document.getElementById('balanceGrowth').textContent = `${userStats.growth > 0 ? '+' : ''}${userStats.growth}% this month`;
+      document.getElementById('totalSent').textContent = `$${userStats.totalSent.toLocaleString(undefined, { minimumFractionDigits: 0 })}`;
+      document.getElementById('totalTransactions').textContent = `${userStats.totalTransactions} transactions`;
+      document.getElementById('totalFees').textContent = `$${userStats.totalFees.toFixed(2)}`;
+      document.getElementById('avgSettlement').textContent = `${userStats.avgSettlement}s`;
+    }
+
+    function renderTransactions() {
+      const container = document.getElementById('recentTransactions');
+      if (!userStats.transactions.length) {
+        container.innerHTML = '<div class="text-muted">No transactions yet.</div>';
+        return;
+      }
+      container.innerHTML = userStats.transactions.slice(0, 5).map(tx => `
+        <div class="transaction-item">
+          <div class="transaction-header">
+            <span class="transaction-amount">$${tx.amount.toFixed(2)} ${tx.source} → ${tx.target}</span>
+            <span class="transaction-status status-${tx.status.toLowerCase()}">${tx.status}</span>
+          </div>
+          <div class="transaction-details">
+            <div>To: ${tx.to}</div>
+            <div>${tx.time} • Fee: $${tx.fee.toFixed(2)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
       // Check authentication
       const token = localStorage.getItem('flashsettle_token');
       const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
-      
+
       if (!token) {
         window.location.href = '/login.html';
         return;
       }
-      
+
       // Display user info
       document.getElementById('userName').textContent = user.name || 'Demo User';
       document.getElementById('userEmail').textContent = user.email || 'demo@flashsettle.com';
       document.getElementById('userGreeting').textContent = `Welcome, ${user.name || 'Demo User'}`;
-      
+
       // Form elements
       const paymentForm = document.getElementById('paymentForm');
       const paymentLoading = document.getElementById('paymentLoading');
       const successModal = document.getElementById('successModal');
       const transactionSummary = document.getElementById('transactionSummary');
       const transactionDetailsModal = document.getElementById('transactionDetailsModal');
-      
+
+      // Render initial stats and transactions
+      renderStats();
+      renderTransactions();
+
       // Update converted amount and fees
       function updateCalculations() {
         const amount = parseFloat(document.getElementById('amount').value) || 0;
         const sourceCurrency = document.getElementById('sourceCurrency').value;
         const targetCurrency = document.getElementById('targetCurrency').value;
-        
+
         // Calculate fee (0.5%)
         const fee = amount * 0.005;
         document.getElementById('fee').value = `$${fee.toFixed(2)} (0.5%)`;
-        
+
         // Mock exchange rates
         const rates = {
           'USD-EUR': 0.95, 'USD-GBP': 0.82, 'USD-USDC': 1.00,
@@ -848,32 +907,35 @@
           'GBP-USD': 1.22, 'GBP-EUR': 1.16, 'GBP-USDC': 1.22,
           'USDC-USD': 1.00, 'USDC-EUR': 0.95, 'USDC-GBP': 0.82
         };
-        
+
         const rateKey = `${sourceCurrency}-${targetCurrency}`;
         const rate = rates[rateKey] || 1;
         const convertedAmount = (amount - fee) * rate;
-        
+
         document.getElementById('convertedAmount').value = convertedAmount.toFixed(2);
         document.getElementById('exchangeRate').value = `1 ${sourceCurrency} = ${rate} ${targetCurrency}`;
       }
-      
+
       // Event listeners for calculations
       document.getElementById('amount').addEventListener('input', updateCalculations);
       document.getElementById('sourceCurrency').addEventListener('change', updateCalculations);
       document.getElementById('targetCurrency').addEventListener('change', updateCalculations);
-      
+
       // Payment form submission
-      paymentForm.addEventListener('submit', async function(e) {
+      paymentForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
+
         const amount = document.getElementById('amount').value;
         const sourceCurrency = document.getElementById('sourceCurrency').value;
         const targetCurrency = document.getElementById('targetCurrency').value;
         const recipient = document.getElementById('recipientAddress').value;
-        
+        const feeStr = document.getElementById('fee').value;
+        const fee = parseFloat(feeStr.replace(/[^0-9.]/g, '')) || 0;
+        const recipientGets = document.getElementById('convertedAmount').value;
+
         // Show loading
         paymentLoading.style.display = 'flex';
-        
+
         try {
           const response = await fetch('/api/v1/payments', {
             method: 'POST',
@@ -888,29 +950,46 @@
               recipient
             })
           });
-          
+
           const data = await response.json();
-          
+
           if (response.ok && data.success) {
-            // Show success modal
+            // Show success modal and update stats/transactions
             showSuccessModal({
               paymentId: data.data.paymentId,
               amount: amount,
               sourceCurrency: sourceCurrency,
               targetCurrency: targetCurrency,
               recipient: recipient,
-              recipientGets: document.getElementById('convertedAmount').value,
-              fee: document.getElementById('fee').value,
+              recipientGets: recipientGets,
+              fee: feeStr,
               transactionHash: data.data.transactionHash,
               timestamp: new Date().toISOString(),
-              status: 'completed',
+              status: 'Completed',
               network: 'Aptos Testnet'
             });
-            
+
+            // Update stats and transactions
+            userStats.balance -= (parseFloat(amount) + fee);
+            userStats.totalSent += parseFloat(amount);
+            userStats.totalFees += fee;
+            userStats.totalTransactions += 1;
+            userStats.transactions.unshift({
+              amount: parseFloat(amount),
+              source: sourceCurrency,
+              target: targetCurrency,
+              status: 'Completed',
+              to: recipient.slice(0, 6) + '...' + recipient.slice(-4),
+              time: 'just now',
+              fee: fee
+            });
+            renderStats();
+            renderTransactions();
+
           } else {
             throw new Error(data.error || 'Payment failed');
           }
-          
+
         } catch (error) {
           console.error('Payment error:', error);
           alert(`Payment failed: ${error.message}`);
@@ -918,11 +997,11 @@
           paymentLoading.style.display = 'none';
         }
       });
-      
+
       // Initialize calculations
       updateCalculations();
     });
-    
+
     // Show success modal
     function showSuccessModal(txData) {
       // Populate transaction summary
@@ -948,39 +1027,37 @@
           <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
         </div>
       `;
-      
+
       document.getElementById('transactionSummary').innerHTML = summaryHTML;
       document.getElementById('transactionDetailsModal').textContent = JSON.stringify(txData, null, 2);
-      
+
       // Show modal
       document.getElementById('successModal').style.display = 'flex';
       document.body.style.overflow = 'hidden'; // Prevent background scrolling
     }
-    
+
     // Close success modal
     function closeSuccessModal() {
       document.getElementById('successModal').style.display = 'none';
       document.body.style.overflow = 'auto'; // Restore scrolling
     }
-    
+
     // Close modal when clicking outside
-    document.getElementById('successModal').addEventListener('click', function(e) {
+    document.getElementById('successModal').addEventListener('click', function (e) {
       if (e.target === this) {
         closeSuccessModal();
       }
     });
-    
+
     // New transaction function
     function newTransaction() {
       closeSuccessModal();
       document.getElementById('paymentForm').reset();
       document.getElementById('amount').value = '100';
       document.getElementById('recipientAddress').value = '0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b';
-      
-      // Recalculate
       document.getElementById('amount').dispatchEvent(new Event('input'));
     }
-    
+
     // Logout function
     function logout() {
       localStorage.removeItem('flashsettle_token');
@@ -989,4 +1066,5 @@
     }
   </script>
 </body>
-</html> 
+
+</html>
