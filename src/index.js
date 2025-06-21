@@ -3,11 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 const { logger } = require('./utils/logger');
 const { errorHandler } = require('./api/middleware/errorHandler');
-const { testConnection, sequelize } = require('./db/config');
-const { syncModels } = require('./db/models');
-const { addDemoUser } = require('./api/controllers/authController');
 
 // Import routes
 const authRoutes = require('./api/routes/authRoutes');
@@ -17,15 +15,11 @@ const rateRoutes = require('./api/routes/rateRoutes');
 // Initialize express app
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
-
-// For development, use a more permissive CSP
-app.use(helmet({
-  contentSecurityPolicy: false // Disable CSP for development
-}));
-
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev', { stream: { write: message => logger.http(message.trim()) } }));
@@ -49,15 +43,10 @@ app.use(errorHandler);
 // Initialize database and start server
 const initializeApp = async () => {
   try {
-    // Test database connection
-    await testConnection();
-    
-    // Sync models with database
-    await syncModels();
-    
-    // Add demo user for testing
-    await addDemoUser();
-    
+    // Connect to MongoDB
+    await mongoose.connect(MONGO_URI);
+    logger.info('MongoDB connected');
+
     // Start server
     app.listen(PORT, () => {
       logger.info(`Server running on port ${PORT}`);
@@ -83,4 +72,4 @@ process.on('unhandledRejection', (error) => {
 // Start the application
 initializeApp();
 
-module.exports = app; // For testing 
+module.exports = app; // For testing

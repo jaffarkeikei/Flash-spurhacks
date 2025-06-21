@@ -16,13 +16,13 @@
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .signup-container {
             max-width: 500px;
             width: 100%;
             padding: 20px;
         }
-        
+
         .signup-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -32,11 +32,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
         }
-        
+
         .logo-section {
             margin-bottom: 40px;
         }
-        
+
         .logo-icon {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -50,31 +50,39 @@
             margin-bottom: 20px;
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .app-title {
             font-size: 36px;
             font-weight: bold;
             color: #333;
             margin-bottom: 8px;
         }
-        
+
         .app-subtitle {
             color: #666;
             font-size: 16px;
             margin-bottom: 0;
         }
-        
+
         .form-section {
             text-align: left;
             margin-bottom: 30px;
         }
-        
+
         .form-control {
             border-radius: 12px;
             border: 2px solid #e1e5e9;
@@ -83,18 +91,18 @@
             transition: all 0.3s ease;
             margin-bottom: 20px;
         }
-        
+
         .form-control:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
-        
+
         .form-label {
             font-weight: 600;
             color: #333;
             margin-bottom: 8px;
         }
-        
+
         .btn-signup {
             background: linear-gradient(135deg, #667eea, #764ba2);
             border: none;
@@ -108,21 +116,21 @@
             overflow: hidden;
             width: 100%;
         }
-        
+
         .btn-signup:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
             color: white;
         }
-        
+
         .btn-signup:active {
             transform: translateY(0);
         }
-        
+
         .photo-section {
             margin-bottom: 30px;
         }
-        
+
         .photo-preview {
             width: 120px;
             height: 120px;
@@ -133,7 +141,7 @@
             display: block;
             background: #f8f9fa;
         }
-        
+
         .photo-placeholder {
             width: 120px;
             height: 120px;
@@ -147,7 +155,7 @@
             color: #6c757d;
             font-size: 24px;
         }
-        
+
         .btn-camera {
             background: linear-gradient(135deg, #28a745, #20c997);
             border: none;
@@ -158,17 +166,17 @@
             color: white;
             transition: all 0.3s ease;
         }
-        
+
         .btn-camera:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 16px rgba(40, 167, 69, 0.3);
             color: white;
         }
-        
+
         .password-field {
             position: relative;
         }
-        
+
         .password-toggle {
             position: absolute;
             right: 15px;
@@ -180,7 +188,7 @@
             cursor: pointer;
             padding: 5px;
         }
-        
+
         .back-link {
             color: #667eea;
             text-decoration: none;
@@ -188,7 +196,7 @@
             margin-top: 20px;
             display: inline-block;
         }
-        
+
         .back-link:hover {
             color: #764ba2;
             text-decoration: underline;
@@ -206,14 +214,14 @@
                 <h1 class="app-title">Flash</h1>
                 <p class="app-subtitle">Create Your Account</p>
             </div>
-            
+
             <div class="form-section">
                 <form id="signupForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
                         <input type="text" class="form-control" id="username" required>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
                         <div class="password-field">
@@ -223,7 +231,7 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="photo-section">
                         <label class="form-label">Profile Photo</label>
                         <div id="photoPreview" class="photo-placeholder">
@@ -233,13 +241,13 @@
                             <i class="fas fa-camera me-2"></i>Take Photo
                         </button>
                     </div>
-                    
+
                     <button type="submit" class="btn-signup" id="signupBtn">
                         <i class="fas fa-user-plus me-2"></i>Create Account
                     </button>
                 </form>
             </div>
-            
+
             <a href="/login.html" class="back-link">
                 <i class="fas fa-arrow-left me-2"></i>Back to Login
             </a>
@@ -258,9 +266,11 @@
                 </div>
                 <div class="modal-body text-center">
                     <div class="camera-container">
-                        <video id="cameraVideo" autoplay playsinline style="width: 100%; max-width: 500px; border-radius: 12px;"></video>
+                        <video id="cameraVideo" autoplay playsinline
+                            style="width: 100%; max-width: 500px; border-radius: 12px;"></video>
                         <canvas id="cameraCanvas" style="display: none;"></canvas>
-                        <img id="capturedImage" style="display: none; width: 100%; max-width: 500px; border-radius: 12px;">
+                        <img id="capturedImage"
+                            style="display: none; width: 100%; max-width: 500px; border-radius: 12px;">
                     </div>
                     <div class="camera-controls mt-3">
                         <button type="button" class="btn btn-primary me-2" id="captureBtn">
@@ -285,21 +295,21 @@
 
     <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const signupForm = document.getElementById('signupForm');
             const signupBtn = document.getElementById('signupBtn');
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
             const takePhotoBtn = document.getElementById('takePhotoBtn');
             const photoPreview = document.getElementById('photoPreview');
-            
+
             let capturedPhotoData = null;
-            
+
             // Toggle password visibility
-            togglePassword.addEventListener('click', function() {
+            togglePassword.addEventListener('click', function () {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
-                
+
                 const icon = this.querySelector('i');
                 if (type === 'password') {
                     icon.className = 'fas fa-eye';
@@ -307,12 +317,12 @@
                     icon.className = 'fas fa-eye-slash';
                 }
             });
-            
+
             // Take Photo button click handler
-            takePhotoBtn.addEventListener('click', function() {
+            takePhotoBtn.addEventListener('click', function () {
                 cameraModal.show();
             });
-            
+
             // Camera functionality
             const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'));
             const cameraVideo = document.getElementById('cameraVideo');
@@ -322,18 +332,18 @@
             const retakeBtn = document.getElementById('retakeBtn');
             const saveBtn = document.getElementById('saveBtn');
             const cameraStatus = document.getElementById('cameraStatus');
-            
+
             let stream = null;
-            
+
             // Initialize camera when modal opens
-            document.getElementById('cameraModal').addEventListener('show.bs.modal', async function() {
+            document.getElementById('cameraModal').addEventListener('show.bs.modal', async function () {
                 try {
-                    stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { 
+                    stream = await navigator.mediaDevices.getUserMedia({
+                        video: {
                             width: { ideal: 1280 },
                             height: { ideal: 720 },
                             facingMode: 'user'
-                        } 
+                        }
                     });
                     cameraVideo.srcObject = stream;
                     cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
@@ -342,9 +352,9 @@
                     cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Camera access denied. Please allow camera permissions.';
                 }
             });
-            
+
             // Stop camera when modal closes
-            document.getElementById('cameraModal').addEventListener('hidden.bs.modal', function() {
+            document.getElementById('cameraModal').addEventListener('hidden.bs.modal', function () {
                 if (stream) {
                     stream.getTracks().forEach(track => track.stop());
                     stream = null;
@@ -357,34 +367,34 @@
                 saveBtn.style.display = 'none';
                 cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
             });
-            
+
             // Capture photo
-            captureBtn.addEventListener('click', function() {
+            captureBtn.addEventListener('click', function () {
                 const context = cameraCanvas.getContext('2d');
                 cameraCanvas.width = cameraVideo.videoWidth;
                 cameraCanvas.height = cameraVideo.videoHeight;
-                
+
                 // Draw video frame to canvas
                 context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
-                
+
                 // Convert to base64
                 capturedPhotoData = cameraCanvas.toDataURL('image/jpeg', 0.8);
-                
+
                 // Display captured image
                 capturedImage.src = capturedPhotoData;
                 cameraVideo.style.display = 'none';
                 capturedImage.style.display = 'block';
-                
+
                 // Update buttons
                 captureBtn.style.display = 'none';
                 retakeBtn.style.display = 'inline-block';
                 saveBtn.style.display = 'inline-block';
-                
+
                 cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo captured! You can retake if needed.';
             });
-            
+
             // Retake photo
-            retakeBtn.addEventListener('click', function() {
+            retakeBtn.addEventListener('click', function () {
                 cameraVideo.style.display = 'block';
                 capturedImage.style.display = 'none';
                 captureBtn.style.display = 'inline-block';
@@ -393,41 +403,57 @@
                 capturedPhotoData = null;
                 cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
             });
-            
+
             // Save photo
-            saveBtn.addEventListener('click', function() {
+            saveBtn.addEventListener('click', function () {
                 if (capturedPhotoData) {
                     // Update photo preview
                     photoPreview.innerHTML = `<img src="${capturedPhotoData}" class="photo-preview" alt="Profile Photo">`;
                     cameraModal.hide();
                 }
             });
-            
             // Handle signup form submission
-            signupForm.addEventListener('submit', function(e) {
+            signupForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
-                
+
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
-                
+
                 if (!capturedPhotoData) {
                     alert('Please take a profile photo before creating your account.');
                     return;
                 }
-                
-                // Here you would typically send the data to your backend
-                console.log('Signup data:', {
-                    username: username,
-                    password: password,
-                    photo: capturedPhotoData ? 'Photo captured' : 'No photo'
-                });
-                
-                // For now, just show success and redirect
-                alert('Account created successfully!');
-                window.location.href = '/dashboard.html';
+
+                try {
+                    const response = await fetch('/api/v1/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password,
+                            picture: capturedPhotoData
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        alert('Error: ' + (errorData.message || 'Failed to register'));
+                        return;
+                    }
+
+                    const data = await response.json();
+                    alert('Account created successfully!');
+                    window.location.href = '/dashboard.html'; // or wherever you want
+                } catch (err) {
+                    console.error('Signup error:', err);
+                    alert('An error occurred. Please try again.');
+                }
             });
+
         });
     </script>
 </body>
 
-</html> 
+</html>

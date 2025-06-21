@@ -16,13 +16,13 @@
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .login-container {
             max-width: 450px;
             width: 100%;
             padding: 20px;
         }
-        
+
         .login-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -32,11 +32,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
         }
-        
+
         .logo-section {
             margin-bottom: 40px;
         }
-        
+
         .logo-icon {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -50,31 +50,39 @@
             margin-bottom: 20px;
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .app-title {
             font-size: 36px;
             font-weight: bold;
             color: #333;
             margin-bottom: 8px;
         }
-        
+
         .app-subtitle {
             color: #666;
             font-size: 16px;
             margin-bottom: 0;
         }
-        
+
         .form-section {
             text-align: left;
             margin-bottom: 30px;
         }
-        
+
         .form-control {
             border-radius: 12px;
             border: 2px solid #e1e5e9;
@@ -83,18 +91,18 @@
             transition: all 0.3s ease;
             margin-bottom: 20px;
         }
-        
+
         .form-control:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
-        
+
         .form-label {
             font-weight: 600;
             color: #333;
             margin-bottom: 8px;
         }
-        
+
         .btn-login {
             background: linear-gradient(135deg, #667eea, #764ba2);
             border: none;
@@ -108,56 +116,17 @@
             overflow: hidden;
             width: 100%;
         }
-        
+
         .btn-login:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
             color: white;
         }
-        
+
         .btn-login:active {
             transform: translateY(0);
         }
-        
-        .demo-info {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border: 2px solid #dee2e6;
-        }
-        
-        .demo-info h6 {
-            color: #667eea;
-            font-weight: 700;
-            margin-bottom: 12px;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .demo-credentials {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        
-        .demo-credentials strong {
-            color: #495057;
-            font-size: 14px;
-        }
-        
-        .demo-credentials span {
-            color: #6c757d;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-        }
-        
-        .loading-spinner {
-            display: none;
-            margin-right: 8px;
-        }
-        
+
         .success-message {
             display: none;
             background: linear-gradient(135deg, #d4edda, #c3e6cb);
@@ -168,7 +137,7 @@
             margin-bottom: 20px;
             font-weight: 600;
         }
-        
+
         .error-message {
             display: none;
             background: linear-gradient(135deg, #f8d7da, #f5c6cb);
@@ -179,7 +148,7 @@
             margin-bottom: 20px;
             font-weight: 600;
         }
-        
+
         .password-toggle {
             position: absolute;
             right: 15px;
@@ -191,7 +160,7 @@
             cursor: pointer;
             padding: 5px;
         }
-        
+
         .password-field {
             position: relative;
         }
@@ -208,37 +177,38 @@
                 <h1 class="app-title">Flash</h1>
                 <p class="app-subtitle">Instant Cross-Border Payments</p>
             </div>
-            
+
             <div class="success-message" id="successMessage">
                 <i class="fas fa-check-circle me-2"></i>Login successful! Redirecting...
             </div>
-            
+
             <div class="error-message" id="errorMessage">
                 <i class="fas fa-exclamation-triangle me-2"></i>Login failed. Please try again.
             </div>
-            
+
             <div class="form-section">
                 <form id="loginForm">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" value="demo@flashsettle.com" required>
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" required>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
                         <div class="password-field">
-                            <input type="password" class="form-control" id="password" value="password123" required>
+                            <input type="password" class="form-control" id="password" required>
                             <button type="button" class="password-toggle" id="togglePassword">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
                     </div>
-                    
+
                     <button type="submit" class="btn-login" id="loginBtn">
-                        <span class="loading-spinner spinner-border spinner-border-sm" id="loadingSpinner"></span>
+                        <span class="loading-spinner spinner-border spinner-border-sm" id="loadingSpinner"
+                            style="display:none"></span>
                         <i class="fas fa-sign-in-alt me-2"></i>Access Flash Dashboard
                     </button>
-                    
+
                     <button type="button" class="btn-login" id="signInBtn" style="margin-top: 15px;">
                         <i class="fas fa-user-plus me-2"></i>Sign Up
                     </button>
@@ -247,46 +217,9 @@
         </div>
     </div>
 
-    <!-- Camera Modal -->
-    <div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cameraModalLabel">
-                        <i class="fas fa-camera me-2"></i>Take Photo for Verification
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="camera-container">
-                        <video id="cameraVideo" autoplay playsinline style="width: 100%; max-width: 500px; border-radius: 12px;"></video>
-                        <canvas id="cameraCanvas" style="display: none;"></canvas>
-                        <img id="capturedImage" style="display: none; width: 100%; max-width: 500px; border-radius: 12px;">
-                    </div>
-                    <div class="camera-controls mt-3">
-                        <button type="button" class="btn btn-primary me-2" id="captureBtn">
-                            <i class="fas fa-camera me-2"></i>Capture Photo
-                        </button>
-                        <button type="button" class="btn btn-secondary me-2" id="retakeBtn" style="display: none;">
-                            <i class="fas fa-redo me-2"></i>Retake
-                        </button>
-                        <button type="button" class="btn btn-success" id="saveBtn" style="display: none;">
-                            <i class="fas fa-save me-2"></i>Save
-                        </button>
-                    </div>
-                    <div class="camera-status mt-3">
-                        <div class="alert alert-info" id="cameraStatus">
-                            <i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const loginForm = document.getElementById('loginForm');
             const loginBtn = document.getElementById('loginBtn');
             const loadingSpinner = document.getElementById('loadingSpinner');
@@ -294,12 +227,13 @@
             const errorMessage = document.getElementById('errorMessage');
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
-            
+            const signInBtn = document.getElementById('signInBtn');
+
             // Toggle password visibility
-            togglePassword.addEventListener('click', function() {
+            togglePassword.addEventListener('click', function () {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
-                
+
                 const icon = this.querySelector('i');
                 if (type === 'password') {
                     icon.className = 'fas fa-eye';
@@ -307,20 +241,20 @@
                     icon.className = 'fas fa-eye-slash';
                 }
             });
-            
+
             // Handle login form submission
-            loginForm.addEventListener('submit', async function(e) {
+            loginForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
-                
-                const email = document.getElementById('email').value;
+
+                const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
-                
+
                 // Show loading state
                 loginBtn.disabled = true;
                 loadingSpinner.style.display = 'inline-block';
                 successMessage.style.display = 'none';
                 errorMessage.style.display = 'none';
-                
+
                 try {
                     // Make API call to login
                     const response = await fetch('/api/v1/auth/login', {
@@ -328,124 +262,37 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ email, password })
+                        body: JSON.stringify({ username, password })
                     });
-                    
+
                     const data = await response.json();
-                    
-                    if (response.ok && data.success) {
-                        // Store authentication data
-                        localStorage.setItem('flashsettle_token', data.data.accessToken);
-                        localStorage.setItem('flashsettle_user', JSON.stringify(data.data.user));
-                        
-                        // Show success message
+
+                    if (response.ok) {
+                        localStorage.setItem('flashsettle_user', JSON.stringify(data.user));
+                        localStorage.setItem('flashsettle_token', data.token); // Store the real token
+
                         successMessage.style.display = 'block';
-                        
-                        // Redirect after short delay
                         setTimeout(() => {
                             window.location.href = '/dashboard.html';
                         }, 1500);
-                        
+
                     } else {
-                        throw new Error(data.error || 'Login failed');
+                        throw new Error(data.message || 'Login failed');
                     }
-                    
+
                 } catch (error) {
                     console.error('Login error:', error);
                     errorMessage.style.display = 'block';
-                    
+
                     // Reset form state
                     loginBtn.disabled = false;
                     loadingSpinner.style.display = 'none';
                 }
             });
 
-            // Camera functionality
-            const signInBtn = document.getElementById('signInBtn');
-            const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'));
-            const cameraVideo = document.getElementById('cameraVideo');
-            const cameraCanvas = document.getElementById('cameraCanvas');
-            const capturedImage = document.getElementById('capturedImage');
-            const captureBtn = document.getElementById('captureBtn');
-            const retakeBtn = document.getElementById('retakeBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const cameraStatus = document.getElementById('cameraStatus');
-            
-            let stream = null;
-            let capturedPhotoData = null;
-            
-            // Sign In button click handler
-            signInBtn.addEventListener('click', function() {
+            // Sign Up button click handler
+            signInBtn.addEventListener('click', function () {
                 window.location.href = '/signup.html';
-            });
-            
-            // Initialize camera when modal opens
-            document.getElementById('cameraModal').addEventListener('show.bs.modal', async function() {
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { 
-                            width: { ideal: 1280 },
-                            height: { ideal: 720 },
-                            facingMode: 'user'
-                        } 
-                    });
-                    cameraVideo.srcObject = stream;
-                    cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
-                } catch (error) {
-                    console.error('Camera access error:', error);
-                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Camera access denied. Please allow camera permissions.';
-                }
-            });
-            
-            // Stop camera when modal closes
-            document.getElementById('cameraModal').addEventListener('hidden.bs.modal', function() {
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                    stream = null;
-                }
-                // Reset UI
-                cameraVideo.style.display = 'block';
-                capturedImage.style.display = 'none';
-                captureBtn.style.display = 'inline-block';
-                retakeBtn.style.display = 'none';
-                saveBtn.style.display = 'none';
-                cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
-            });
-            
-            // Capture photo
-            captureBtn.addEventListener('click', function() {
-                const context = cameraCanvas.getContext('2d');
-                cameraCanvas.width = cameraVideo.videoWidth;
-                cameraCanvas.height = cameraVideo.videoHeight;
-                
-                // Draw video frame to canvas
-                context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
-                
-                // Convert to base64
-                capturedPhotoData = cameraCanvas.toDataURL('image/jpeg', 0.8);
-                
-                // Display captured image
-                capturedImage.src = capturedPhotoData;
-                cameraVideo.style.display = 'none';
-                capturedImage.style.display = 'block';
-                
-                // Update buttons
-                captureBtn.style.display = 'none';
-                retakeBtn.style.display = 'inline-block';
-                saveBtn.style.display = 'inline-block';
-                
-                cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo captured! You can retake if needed.';
-            });
-            
-            // Retake photo
-            retakeBtn.addEventListener('click', function() {
-                cameraVideo.style.display = 'block';
-                capturedImage.style.display = 'none';
-                captureBtn.style.display = 'inline-block';
-                retakeBtn.style.display = 'none';
-                saveBtn.style.display = 'none';
-                capturedPhotoData = null;
-                cameraStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Position your face in the center of the frame';
             });
         });
     </script>
