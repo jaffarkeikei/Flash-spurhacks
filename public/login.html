@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flash Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+    <!-- Branding -->
+    <div class="text-center space-y-2">
+        <div class="flex items-center justify-center space-x-2 mb-4">
+            <div class="relative">
+                <i data-lucide="zap" class="text-blue-600 w-8 h-8"></i>
+                <div class="absolute -top-1 -right-1 h-3 w-3 bg-yellow-400 rounded-full animate-pulse"></div>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900">Flash</h1>
+        </div>
+        <div class="flex items-center justify-center space-x-1 text-sm text-gray-600 pb-10">
+            <i data-lucide="globe" class="w-4 h-4"></i>
+            <span>Instant Cross-Border Settlements</span>
+        </div>
+    </div>
+
+    <!-- Login Card -->
+    <div class="w-full max-w-md space-y-6 bg-white p-6 rounded-xl shadow-lg">
+        <div class="text-center">
+            <h2 class="text-2xl font-semibold py-2">Welcome back</h2>
+            <p class="text-gray-500 text-sm py-2">Sign in to your Flash account to manage payments</p>
+        </div>
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                <input id="email" type="email" required
+                    class="mt-1 block w-full h-11 border border-gray-300 rounded-md px-4" value="demo@flashsettle.com"
+                    readonly />
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="relative">
+                    <input id="password" type="password" required
+                        class="mt-1 block w-full h-11 pr-10 border border-gray-300 rounded-md px-4" value="password123"
+                        readonly />
+                    <button type="button" id="togglePassword"
+                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" id="remember" class="h-4 w-4 text-blue-600" />
+                    <span class="text-gray-600">Remember me</span>
+                </label>
+                <a href="#" class="text-blue-600 hover:text-blue-700">Forgot password?</a>
+            </div>
+            <button type="submit"
+                class="w-full h-11 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 flex justify-center items-center">
+                Login
+                <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+            </button>
+        </form>
+
+        <!-- Separator -->
+        <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t"></div>
+            </div>
+            <div class="relative flex justify-center text-xs uppercase">
+                <span class="bg-white px-2 text-gray-500">Or continue with</span>
+            </div>
+        </div>
+
+        <!-- Social Buttons -->
+        <div class="grid grid-cols-2 gap-3">
+            <button class="h-11 border rounded flex items-center justify-center space-x-2">
+                <svg class="h-4 w-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                    <path fill="#EA4335"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
+                <span>Google</span>
+            </button>
+            <button class="h-11 border rounded flex items-center justify-center space-x-2">
+                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.024-.105-.949-.199-2.403.041-3.439.219-.937 1.219-5.160 1.219-5.160s-.312-.623-.312-1.543c0-1.444.83-2.52 1.864-2.52.879 0 1.303.66 1.303 1.450 0 .883-.562 2.204-.849 3.427-.241 1.019.511 1.848 1.517 1.848 1.819 0 3.220-1.919 3.220-4.693 0-2.455-1.762-4.169-4.281-4.169-2.917 0-4.629 2.188-4.629 4.448 0 .882.341 1.827.766 2.341.084.101.096.19.071.294-.077.323-.25 1.011-.284 1.152-.045.186-.145.226-.334.136-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.969-.527-2.292-1.155l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001 12.017.001z" />
+                </svg>
+                <span>Apple</span>
+            </button>
+        </div>
+
+        <div class="text-center text-sm text-gray-600">
+            Don’t have an account? <a href="#" class="text-blue-600 hover:text-blue-700">Sign up for Flash</a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Toggle password visibility
+        document.getElementById("togglePassword").addEventListener("click", () => {
+            const pwd = document.getElementById("password");
+            const icon = document.querySelector("#togglePassword i");
+            const isVisible = pwd.type === "text";
+            pwd.type = isVisible ? "password" : "text";
+            icon.setAttribute("data-lucide", isVisible ? "eye" : "eye-off");
+            lucide.createIcons();
+        });
+
+        // Handle login
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const user = {
+                name: "Demo User",
+                email: email
+            };
+            localStorage.setItem("flashsettle_token", "mock-token");
+            localStorage.setItem("flashsettle_user", JSON.stringify(user));
+            window.location.href = "/dashboard.html";
+        });
+    </script>
+</body>
+
+</html>
