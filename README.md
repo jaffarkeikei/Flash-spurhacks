@@ -42,27 +42,112 @@ Aptos provides several critical advantages that make Flash possible:
 
 ## 🏗️ Architecture
 
-Flash consists of three main layers:
+Flash consists of three main layers working together to enable instant cross-border payments:
 
-### 1. Frontend Layer
+### System Architecture
 
-- Merchant API gateway and user portal
-- Fiat on/off ramp integration with payment processors
-- Transaction monitoring dashboard
+```mermaid
+graph TB
+    subgraph "Frontend Layer"
+        UI["🌐 Flash Dashboard<br/>React + TypeScript"]
+        API["🔌 REST API Gateway<br/>Express.js"]
+    end
+    
+    subgraph "Middleware Layer"
+        AI["🧠 AI Route Optimizer<br/>Smart Algorithms"]
+        FX["📈 FX Rate Monitor<br/>Real-time Rates"]
+        LM["💧 Liquidity Manager<br/>Pool Monitoring"]
+    end
+    
+    subgraph "Integration Layer"
+        CIRCLE["⭕ Circle API<br/>CCTP + USDC"]
+        AUTH["🔐 JWT Auth<br/>Security"]
+        DB["🗄️ PostgreSQL<br/>Transaction Data"]
+    end
+    
+    subgraph "Blockchain Layer"
+        APTOS["⚡ Aptos Network<br/>19.2K TPS"]
+        MOVE["📜 Move Contracts<br/>Escrow + Settlement"]
+        WALLET["👛 Demo Wallets<br/>Alice + Bob"]
+    end
+    
+    UI --> API
+    API --> AI
+    API --> AUTH
+    AI --> FX
+    AI --> LM
+    API --> CIRCLE
+    API --> DB
+    API --> APTOS
+    APTOS --> MOVE
+    APTOS --> WALLET
+    
+    style UI fill:#e1f5fe
+    style API fill:#b3e5fc
+    style AI fill:#81d4fa
+    style FX fill:#4fc3f7
+    style LM fill:#29b6f6
+    style CIRCLE fill:#03a9f4
+    style AUTH fill:#039be5
+    style DB fill:#0288d1
+    style APTOS fill:#0277bd
+    style MOVE fill:#01579b
+    style WALLET fill:#0d47a1
+```
 
-### 2. Middleware Layer
+### Payment Flow
 
-- AI-powered settlement path optimizer
-- FX rate monitoring and prediction
-- Liquidity pool management
+```mermaid
+sequenceDiagram
+    participant U as 👤 User
+    participant UI as 🌐 Dashboard
+    participant AI as 🧠 AI Router
+    participant API as 🔌 API Gateway
+    participant C as ⭕ Circle API
+    participant A as ⚡ Aptos Network
+    
+    Note over U,A: Flash Cross-Border Payment Flow
+    
+    U->>UI: Login & Select Amount
+    UI->>API: Create Payment Request
+    API->>AI: Optimize Route
+    AI->>AI: Analyze Liquidity + Rates
+    AI-->>API: Best Route Found
+    
+    alt Circle USDC Route
+        API->>C: Initiate CCTP Transfer
+        C-->>API: Transfer Confirmed
+    else Direct Aptos Route
+        API->>A: Submit Transaction
+        A-->>API: Tx Hash Generated
+    end
+    
+    API->>A: Final Settlement
+    A-->>API: Settlement Complete (0.8s)
+    API-->>UI: Payment Success
+    UI-->>U: ✅ Transfer Complete
+    
+    Note over U,A: Total Time: <1 Second
+```
 
-### 3. Blockchain Layer
+### Layer Details
 
-- Smart contracts for escrow and settlement
-- Sponsored transaction management
-- Cross-chain message passing
+#### 1. Frontend Layer
+- **React Dashboard**: Modern UI with circular avatars and real-time updates
+- **API Gateway**: RESTful endpoints with comprehensive validation
+- **Authentication**: JWT-based security with refresh tokens
 
-See our [Architecture Document](docs/architecture.md) for detailed diagrams and component interactions.
+#### 2. Middleware Layer
+- **AI Route Optimizer**: Smart algorithms for cost and speed optimization
+- **FX Rate Monitor**: Real-time exchange rate tracking and prediction
+- **Liquidity Manager**: Multi-pool monitoring for optimal routing
+
+#### 3. Blockchain Layer
+- **Aptos Network**: 19.2K TPS with sub-second finality
+- **Move Contracts**: Secure escrow and settlement logic
+- **CCTP Integration**: Cross-chain USDC transfers via Circle
+
+See our [Architecture Document](docs/architecture.md) for detailed technical specifications.
 
 ## 📚 Documentation
 
