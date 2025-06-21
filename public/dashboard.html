@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlashSettle Dashboard - Instant Cross-Border Payments</title>
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/vendor/fontawesome/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+    }
+    .demo-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .card {
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    .result-panel {
+      display: none;
+      margin-top: 2rem;
+    }
+    #transactionDetails {
+      font-family: monospace;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .status-badge {
+      font-size: 1rem;
+    }
+    .user-info {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Authentication Check -->
+  <script>
+    // Check if user is authenticated
+    const token = localStorage.getItem('flashsettle_token');
+    const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
+    
+    if (!token) {
+      window.location.href = '/login.html';
+    }
+  </script>
+
+  <div class="container">
+    <!-- Logout Button -->
+    <button class="btn btn-outline-danger logout-btn" onclick="logout()">
+      <i class="fas fa-sign-out-alt me-2"></i>Logout
+    </button>
+
+    <div class="demo-header">
+      <h1><i class="fas fa-bolt text-primary"></i> FlashSettle</h1>
+      <p class="lead">Instant Cross-Border Payments Dashboard</p>
+    </div>
+
+    <!-- User Info Panel -->
+    <div class="user-info">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h5><i class="fas fa-user me-2"></i>Welcome, <span id="userName">Demo User</span></h5>
+          <p class="mb-0"><i class="fas fa-envelope me-2"></i><span id="userEmail">demo@flashsettle.com</span></p>
+        </div>
+        <div class="col-md-4 text-end">
+          <small><i class="fas fa-wallet me-1"></i>Wallet: <span id="userWallet">0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b</span></small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Form Section -->
+    <div class="row mb-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Send Cross-Border Payment</h5>
+          </div>
+          <div class="card-body">
+            <form id="demoPaymentForm">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="amount" class="form-label">Amount</label>
+                  <div class="input-group">
+                    <input type="number" min="1" step="1" class="form-control" id="amount" placeholder="100" value="100" required>
+                    <select class="form-select" id="sourceCurrency" style="max-width: 100px;">
+                      <option value="USD" selected>USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="USDC">USDC</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Recipient Gets</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="convertedAmount" value="95.00" readonly>
+                    <select class="form-select" id="targetCurrency" style="max-width: 100px;">
+                      <option value="USD">USD</option>
+                      <option value="EUR" selected>EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="USDC">USDC</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="recipientAddress" class="form-label">Recipient Address</label>
+                <input type="text" class="form-control" id="recipientAddress" 
+                  value="0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b" required>
+                <div class="form-text">Aptos blockchain address of the recipient</div>
+              </div>
+              
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="fee" class="form-label">Fee</label>
+                  <input type="text" class="form-control" id="fee" readonly value="0.50 USD (0.5%)">
+                </div>
+                <div class="col-md-6">
+                  <label for="estimatedTime" class="form-label">Estimated Time</label>
+                  <input type="text" class="form-control" id="estimatedTime" readonly value="< 1 second">
+                </div>
+              </div>
+              
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary" type="submit" id="sendMoneyBtn">
+                  <i class="fas fa-paper-plane me-2"></i>Send Money
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transaction Result Section -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card result-panel" id="resultPanel">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Transaction Results</h5>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-success mb-4">
+              <i class="fas fa-check-circle me-2"></i> Payment processed successfully!
+            </div>
+            
+            <h6>Transaction Details:</h6>
+            <pre id="transactionDetails" class="bg-light p-3 rounded"></pre>
+            
+            <div class="mt-4">
+              <h6>Payment Status: <span class="badge bg-success status-badge" id="paymentStatus">Completed</span></h6>
+              <div class="progress mt-2">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2 mt-4">
+              <button class="btn btn-primary" type="button" id="newTransactionBtn">
+                <i class="fas fa-plus me-2"></i>Start New Transaction
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script>
+    // DOM Elements
+    document.addEventListener('DOMContentLoaded', function() {
+      const demoPaymentForm = document.getElementById('demoPaymentForm');
+      const resultPanel = document.getElementById('resultPanel');
+      const transactionDetails = document.getElementById('transactionDetails');
+      const newTransactionBtn = document.getElementById('newTransactionBtn');
+      
+      // Get user info from localStorage
+      const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
+      const token = localStorage.getItem('flashsettle_token');
+      
+      // Display user info
+      document.getElementById('userName').textContent = user.name || 'Demo User';
+      document.getElementById('userEmail').textContent = user.email || 'demo@flashsettle.com';
+      document.getElementById('userWallet').textContent = user.walletAddress || '0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b';
+      
+      // API Base URL
+      const API_BASE_URL = '/api/v1';
+      
+      // Payment form submission
+      demoPaymentForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!token) {
+          alert('Please login first!');
+          window.location.href = '/login.html';
+          return;
+        }
+        
+        const amount = document.getElementById('amount').value;
+        const sourceCurrency = document.getElementById('sourceCurrency').value;
+        const targetCurrency = document.getElementById('targetCurrency').value;
+        const recipient = document.getElementById('recipientAddress').value;
+        
+        try {
+          const response = await fetch(`${API_BASE_URL}/payments/send`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              amount: parseFloat(amount),
+              sourceCurrency,
+              targetCurrency,
+              recipient
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (response.ok && data.data) {
+            // Show transaction details
+            resultPanel.style.display = 'block';
+            
+            // Scroll to results
+            resultPanel.scrollIntoView({ behavior: 'smooth' });
+            
+            // Format and display transaction data
+            const txDetails = {
+              id: data.data.paymentId,
+              amount: `${amount} ${sourceCurrency}`,
+              recipient: recipient,
+              recipientGets: `${document.getElementById('convertedAmount').value} ${targetCurrency}`,
+              fee: document.getElementById('fee').value,
+              timestamp: new Date().toISOString(),
+              status: 'completed',
+              blockchainTxHash: data.data.transactionHash || 'tx_simulated_hash',
+              onChainPaymentId: data.data.paymentId || 'payment_simulated_id'
+            };
+            
+            transactionDetails.textContent = JSON.stringify(txDetails, null, 2);
+          } else {
+            alert(`Payment failed: ${data.error || 'Unknown error'}`);
+          }
+        } catch (error) {
+          console.error('Payment error:', error);
+          alert('Payment failed. Check server connection.');
+        }
+      });
+      
+      // New transaction button
+      newTransactionBtn.addEventListener('click', function() {
+        resultPanel.style.display = 'none';
+        demoPaymentForm.reset();
+        
+        // Set default values
+        document.getElementById('amount').value = '100';
+        document.getElementById('convertedAmount').value = '95.00';
+        document.getElementById('recipientAddress').value = '0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b';
+      });
+      
+      // Update converted amount when source amount or currencies change
+      document.getElementById('amount').addEventListener('input', updateConvertedAmount);
+      document.getElementById('sourceCurrency').addEventListener('change', updateConvertedAmount);
+      document.getElementById('targetCurrency').addEventListener('change', updateConvertedAmount);
+      
+      function updateConvertedAmount() {
+        const amount = parseFloat(document.getElementById('amount').value) || 0;
+        const fee = amount * 0.005; // 0.5% fee
+        document.getElementById('fee').value = `${fee.toFixed(2)} USD (0.5%)`;
+        
+        // Simple conversion (in real app would use exchange rates)
+        let convertedAmount = amount - fee;
+        const sourceCurrency = document.getElementById('sourceCurrency').value;
+        const targetCurrency = document.getElementById('targetCurrency').value;
+        
+        // Apply mock exchange rates
+        if (sourceCurrency !== targetCurrency) {
+          const rates = {
+            'USD-EUR': 0.95,
+            'USD-GBP': 0.82,
+            'USD-USDC': 1,
+            'EUR-USD': 1.05,
+            'EUR-GBP': 0.86,
+            'EUR-USDC': 1.05,
+            'GBP-USD': 1.22,
+            'GBP-EUR': 1.16,
+            'GBP-USDC': 1.22,
+            'USDC-USD': 1,
+            'USDC-EUR': 0.95,
+            'USDC-GBP': 0.82
+          };
+          
+          const rateKey = `${sourceCurrency}-${targetCurrency}`;
+          if (rates[rateKey]) {
+            convertedAmount = convertedAmount * rates[rateKey];
+          }
+        }
+        
+        document.getElementById('convertedAmount').value = convertedAmount.toFixed(2);
+      }
+    });
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem('flashsettle_token');
+      localStorage.removeItem('flashsettle_user');
+      window.location.href = '/login.html';
+    }
+  </script>
+</body>
+</html> 
