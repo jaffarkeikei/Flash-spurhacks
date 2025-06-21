@@ -104,27 +104,32 @@ module flashsettle::fee_module {
         config.updated_at = timestamp::now_seconds();
     }
     
-    public fun process_fee<CoinType>(
-        fee_coins: Coin<CoinType>
-    ) acquires FeeConfig {
-        let admin_addr = @flashsettle;
+    public entry fun initialize_fee_store<CoinType>(admin: &signer) acquires FeeConfig {
+        let admin_addr = signer::address_of(admin);
+        assert!(admin_addr == @flashsettle, ENOT_AUTHORIZED);
         assert!(exists<FeeConfig>(admin_addr), EMODULE_NOT_INITIALIZED);
+        
         let config = borrow_global<FeeConfig>(admin_addr);
         
-        // Initialize fee store if needed
         if (!exists<FeeStore<CoinType>>(admin_addr)) {
-            move_to(admin_addr, FeeStore<CoinType> {
+            move_to(admin, FeeStore<CoinType> {
                 config: *config,
                 collected_fees: coin::zero<CoinType>()
             });
         };
         
-        // Initialize treasury store if needed
         if (!exists<TreasuryStore<CoinType>>(admin_addr)) {
-            move_to(admin_addr, TreasuryStore<CoinType> {
+            move_to(admin, TreasuryStore<CoinType> {
                 funds: coin::zero<CoinType>()
             });
         };
+    }
+
+    public fun process_fee<CoinType>(
+        fee_coins: Coin<CoinType>
+    ) acquires FeeStore {
+        let admin_addr = @flashsettle;
+        assert!(exists<FeeStore<CoinType>>(admin_addr), EMODULE_NOT_INITIALIZED);
         
         let fee_store = borrow_global_mut<FeeStore<CoinType>>(admin_addr);
         

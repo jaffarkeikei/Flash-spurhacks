@@ -26,23 +26,28 @@ module flashsettle::escrow_module {
         assert!(account_addr == @flashsettle, ENOT_AUTHORIZED);
     }
     
-    public fun create_escrow<CoinType>(
-        sender: &signer,
-        escrow_id: u64,
-        amount: u64
-    ) {
-        let sender_addr = signer::address_of(sender);
+    public entry fun initialize_escrow_store<CoinType>(admin: &signer) {
+        let admin_addr = signer::address_of(admin);
+        assert!(admin_addr == @flashsettle, ENOT_AUTHORIZED);
         
-        // Verify sender has sufficient funds
-        assert!(coin::balance<CoinType>(sender_addr) >= amount, EINSUFFICIENT_FUNDS);
-        
-        // Initialize store if needed
-        if (!exists<EscrowStore<CoinType>>(@flashsettle)) {
-            move_to(@flashsettle, EscrowStore<CoinType> {
+        if (!exists<EscrowStore<CoinType>>(admin_addr)) {
+            move_to(admin, EscrowStore<CoinType> {
                 escrows: table::new(),
                 coins: coin::zero<CoinType>()
             });
         };
+    }
+    
+    public fun create_escrow<CoinType>(
+        sender: &signer,
+        escrow_id: u64,
+        amount: u64
+    ) acquires EscrowStore {
+        let sender_addr = signer::address_of(sender);
+        
+        // Verify sender has sufficient funds
+        assert!(coin::balance<CoinType>(sender_addr) >= amount, EINSUFFICIENT_FUNDS);
+        assert!(exists<EscrowStore<CoinType>>(@flashsettle), EMODULE_NOT_INITIALIZED);
         
         // Transfer funds to escrow
         let escrow_coins = coin::withdraw<CoinType>(sender, amount);
@@ -64,7 +69,7 @@ module flashsettle::escrow_module {
         escrow_id: u64,
         recipient: address,
         amount: u64
-    ) {
+    ) acquires EscrowStore {
         let operator_addr = signer::address_of(operator);
         assert!(operator_addr == @flashsettle, ENOT_AUTHORIZED);
         
@@ -91,7 +96,7 @@ module flashsettle::escrow_module {
     public fun cancel_escrow<CoinType>(
         sender: &signer,
         escrow_id: u64
-    ) {
+    ) acquires EscrowStore {
         let sender_addr = signer::address_of(sender);
         
         assert!(exists<EscrowStore<CoinType>>(@flashsettle), EMODULE_NOT_INITIALIZED);
@@ -109,7 +114,7 @@ module flashsettle::escrow_module {
         table::remove(&mut escrow_store.escrows, escrow_id);
     }
     
-    public fun get_escrow_amount<CoinType>(escrow_id: u64): u64 {
+    public fun get_escrow_amount<CoinType>(escrow_id: u64): u64 acquires EscrowStore {
         assert!(exists<EscrowStore<CoinType>>(@flashsettle), EMODULE_NOT_INITIALIZED);
         let escrow_store = borrow_global<EscrowStore<CoinType>>(@flashsettle);
         assert!(table::contains(&escrow_store.escrows, escrow_id), EESCROW_NOT_FOUND);
