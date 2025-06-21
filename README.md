@@ -89,7 +89,6 @@ See our [Architecture Document](docs/architecture.md) for detailed diagrams and 
 - [ ] Gasless transaction implementation
 - [ ] Basic AI routing prototype
 - [ ] Enhanced compliance features
-- [ ] Merchant dashboard improvements
 
 ### Phase 3 (Planned)
 
