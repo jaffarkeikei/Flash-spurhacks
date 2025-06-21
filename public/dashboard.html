@@ -5,177 +5,606 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flash Dashboard - Instant Cross-Border Payments</title>
   <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/vendor/fontawesome/all.min.css">
   <style>
     body {
-      background-color: #f8f9fa;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 10px 0;
+    }
+    
+    .navbar-brand {
+      font-weight: bold;
+      color: #667eea !important;
+      font-size: 20px;
+    }
+    
+    .main-container {
       padding: 20px;
-    }
-    .container {
-      max-width: 900px;
-    }
-    .demo-header {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .card {
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-    .result-panel {
-      display: none;
-      margin-top: 2rem;
-    }
-    #transactionDetails {
-      font-family: monospace;
-      max-height: 300px;
+      max-width: 1400px;
+      margin: 0 auto;
+      height: calc(100vh - 70px);
       overflow-y: auto;
     }
-    .status-badge {
-      font-size: 1rem;
-    }
-    .user-info {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    
+    .user-info-card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      margin-bottom: 2rem;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .logout-btn {
+    
+    .user-details h5 {
+      margin: 0 0 8px 0;
+      font-weight: 600;
+      font-size: 20px;
+    }
+    
+    .user-details small {
+      opacity: 0.9;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 3px;
+    }
+    
+    .balance-info {
+      text-align: right;
+    }
+    
+    .balance-info h4 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 28px;
+    }
+    
+    .balance-info small {
+      opacity: 0.9;
+      font-size: 13px;
+      display: block;
+      margin-top: 3px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+    
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 20px;
+      color: white;
+    }
+    
+    .stat-icon.blue { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .stat-icon.cyan { background: linear-gradient(135deg, #17a2b8, #20c997); }
+    .stat-icon.orange { background: linear-gradient(135deg, #fd7e14, #ffc107); }
+    .stat-icon.teal { background: linear-gradient(135deg, #20c997, #17a2b8); }
+    
+    .stat-card h6 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      color: #666;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
+    }
+    
+    .stat-subtitle {
+      font-size: 12px;
+      color: #888;
+      margin: 8px 0 0 0;
+    }
+    
+    .bottom-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      height: calc(100vh - 420px);
+      min-height: 500px;
+    }
+    
+    .section-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .section-header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 20px 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .section-header h5 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .section-body {
+      padding: 25px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .form-control {
+      border-radius: 10px;
+      border: 2px solid #e1e5e9;
+      padding: 12px 16px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .form-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 10px;
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .currency-select {
+      border-radius: 0 10px 10px 0;
+      border-left: none;
+      max-width: 110px;
+      font-size: 14px;
+    }
+    
+    .amount-input {
+      border-radius: 10px 0 0 10px;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .info-item .form-control {
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 10px 12px;
+    }
+    
+    .transaction-item {
+      border: 1px solid #e1e5e9;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .transaction-item:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    .transaction-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .transaction-amount {
+      font-weight: 700;
+      font-size: 15px;
+    }
+    
+    .transaction-status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-processing {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .transaction-details {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.4;
+    }
+    
+    .loading-overlay {
+      display: none;
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    
+    .transaction-result {
+      display: none;
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      border: 2px solid #c3e6cb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .transaction-details-result {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 15px 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .main-container {
+        padding: 15px;
+      }
+      
+      .bottom-section {
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .bottom-section {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 20px;
+      }
+      
+      .section-card {
+        min-height: 400px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 10px;
+      }
+      
+      .user-info-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+        padding: 20px;
+      }
+      
+      .balance-info {
+        text-align: center;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .section-body {
+        padding: 20px;
+      }
+      
+      .form-control {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main-container {
+        padding: 8px;
+      }
+      
+      .user-info-card {
+        padding: 15px;
+      }
+      
+      .stat-card {
+        padding: 20px;
+      }
+      
+      .section-header {
+        padding: 15px 20px;
+      }
+      
+      .section-body {
+        padding: 15px;
+      }
+      
+      .btn-primary {
+        padding: 12px 25px;
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Authentication Check -->
-  <script>
-    // Check if user is authenticated
-    const token = localStorage.getItem('flashsettle_token');
-    const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
-    
-    if (!token) {
-      window.location.href = '/login.html';
-    }
-  </script>
-
-  <div class="container">
-    <!-- Logout Button -->
-    <button class="btn btn-outline-danger logout-btn" onclick="logout()">
-      <i class="fas fa-sign-out-alt me-2"></i>Logout
-    </button>
-
-    <div class="demo-header">
-      <h1><i class="fas fa-bolt text-primary"></i> Flash</h1>
-      <p class="lead">Instant Cross-Border Payments Dashboard</p>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-bolt me-2"></i>Flash Dashboard
+      </a>
+      <div class="navbar-nav ms-auto">
+        <span class="navbar-text me-3" id="userGreeting">Welcome, Demo User</span>
+        <button class="btn btn-outline-danger btn-sm" onclick="logout()">
+          <i class="fas fa-sign-out-alt me-1"></i>Logout
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <!-- User Info Panel -->
-    <div class="user-info">
-      <div class="row align-items-center">
-        <div class="col-md-8">
-          <h5><i class="fas fa-user me-2"></i>Welcome, <span id="userName">Demo User</span></h5>
-          <p class="mb-0"><i class="fas fa-envelope me-2"></i><span id="userEmail">demo@flashsettle.com</span></p>
-        </div>
-        <div class="col-md-4 text-end">
-          <small><i class="fas fa-wallet me-1"></i>Wallet: <span id="userWallet">0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b</span></small>
-        </div>
+  <!-- Main Container -->
+  <div class="container-fluid main-container">
+    <!-- User Info Card -->
+    <div class="user-info-card">
+      <div class="user-details">
+        <h5><i class="fas fa-user me-2"></i><span id="userName">Demo User</span></h5>
+        <small><i class="fas fa-envelope me-1"></i><span id="userEmail">demo@flashsettle.com</span></small>
+        <small class="d-block"><i class="fas fa-wallet me-1"></i>Wallet: 0x8ea67e...c71b</small>
+      </div>
+      <div class="balance-info">
+        <h4>$12,450.00</h4>
+        <small>Account Balance</small>
+        <small class="d-block">+2.5% this month</small>
       </div>
     </div>
 
-    <!-- Payment Form Section -->
-    <div class="row mb-4">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Send Cross-Border Payment</h5>
-          </div>
-          <div class="card-body">
-            <form id="demoPaymentForm">
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <label for="amount" class="form-label">Amount</label>
-                  <div class="input-group">
-                    <input type="number" min="1" step="1" class="form-control" id="amount" placeholder="100" value="100" required>
-                    <select class="form-select" id="sourceCurrency" style="max-width: 100px;">
-                      <option value="USD" selected>USD</option>
-                      <option value="EUR">EUR</option>
-                      <option value="GBP">GBP</option>
-                      <option value="USDC">USDC</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Recipient Gets</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" id="convertedAmount" value="95.00" readonly>
-                    <select class="form-select" id="targetCurrency" style="max-width: 100px;">
-                      <option value="USD">USD</option>
-                      <option value="EUR" selected>EUR</option>
-                      <option value="GBP">GBP</option>
-                      <option value="USDC">USDC</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <label for="recipientAddress" class="form-label">Recipient Address</label>
-                <input type="text" class="form-control" id="recipientAddress" 
-                  value="0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b" required>
-                <div class="form-text">Aptos blockchain address of the recipient</div>
-              </div>
-              
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <label for="fee" class="form-label">Fee</label>
-                  <input type="text" class="form-control" id="fee" readonly value="0.50 USD (0.5%)">
-                </div>
-                <div class="col-md-6">
-                  <label for="estimatedTime" class="form-label">Estimated Time</label>
-                  <input type="text" class="form-control" id="estimatedTime" readonly value="< 1 second">
-                </div>
-              </div>
-              
-              <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit" id="sendMoneyBtn">
-                  <i class="fas fa-paper-plane me-2"></i>Send Money
-                </button>
-              </div>
-            </form>
-          </div>
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fas fa-paper-plane"></i>
         </div>
+        <h6>Total Sent</h6>
+        <div class="stat-value">$8,240</div>
+        <div class="stat-subtitle">12 transactions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon cyan">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h6>Avg. Settlement</h6>
+        <div class="stat-value">0.8s</div>
+        <div class="stat-subtitle">Lightning fast</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange">
+          <i class="fas fa-percentage"></i>
+        </div>
+        <h6>Total Fees</h6>
+        <div class="stat-value">$12.40</div>
+        <div class="stat-subtitle">0.15% average</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon teal">
+          <i class="fas fa-globe"></i>
+        </div>
+        <h6>Countries</h6>
+        <div class="stat-value">8</div>
+        <div class="stat-subtitle">Global reach</div>
       </div>
     </div>
 
-    <!-- Transaction Result Section -->
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card result-panel" id="resultPanel">
-          <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Transaction Results</h5>
-          </div>
-          <div class="card-body">
-            <div class="alert alert-success mb-4">
-              <i class="fas fa-check-circle me-2"></i> Payment processed successfully!
+    <!-- Bottom Section: Payment Form + Recent Transactions -->
+    <div class="bottom-section">
+      <!-- Send Payment Section -->
+      <div class="section-card">
+        <div class="section-header">
+          <i class="fas fa-paper-plane"></i>
+          <h5>Send Cross-Border Payment</h5>
+        </div>
+        <div class="section-body" style="position: relative;">
+          <div class="loading-overlay" id="paymentLoading">
+            <div class="text-center">
+              <div class="spinner-border text-primary mb-2" style="width: 2rem; height: 2rem;" role="status"></div>
+              <h6>Processing Payment...</h6>
+              <small class="text-muted">Connecting to Aptos blockchain</small>
             </div>
-            
-            <h6>Transaction Details:</h6>
-            <pre id="transactionDetails" class="bg-light p-3 rounded"></pre>
-            
-            <div class="mt-4">
-              <h6>Payment Status: <span class="badge bg-success status-badge" id="paymentStatus">Completed</span></h6>
-              <div class="progress mt-2">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          
+          <form id="paymentForm">
+            <div class="row mb-3">
+              <div class="col-6">
+                <label for="amount" class="form-label">Amount to Send</label>
+                <div class="input-group">
+                  <input type="number" min="1" step="0.01" class="form-control amount-input" id="amount" placeholder="100" value="100" required>
+                  <select class="form-select currency-select" id="sourceCurrency">
+                    <option value="USD" selected>🇺🇸 USD</option>
+                    <option value="EUR">🇪🇺 EUR</option>
+                    <option value="GBP">🇬🇧 GBP</option>
+                    <option value="USDC">💰 USDC</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="form-label">Recipient Gets</label>
+                <div class="input-group">
+                  <input type="text" class="form-control amount-input" id="convertedAmount" value="94.52" readonly>
+                  <select class="form-select currency-select" id="targetCurrency">
+                    <option value="USD">🇺🇸 USD</option>
+                    <option value="EUR" selected>🇪🇺 EUR</option>
+                    <option value="GBP">🇬🇧 GBP</option>
+                    <option value="USDC">💰 USDC</option>
+                  </select>
+                </div>
               </div>
             </div>
             
-            <div class="d-grid gap-2 mt-4">
-              <button class="btn btn-primary" type="button" id="newTransactionBtn">
-                <i class="fas fa-plus me-2"></i>Start New Transaction
+            <div class="mb-3">
+              <label for="recipientAddress" class="form-label">Recipient Blockchain Address</label>
+              <input type="text" class="form-control" id="recipientAddress" 
+                value="0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b" required>
+              <div class="form-text">Aptos blockchain address of the recipient</div>
+            </div>
+            
+            <div class="info-grid">
+              <div class="info-item">
+                <label for="fee" class="form-label">Network Fee</label>
+                <input type="text" class="form-control" id="fee" readonly value="$0.50 (0.5%)">
+              </div>
+              <div class="info-item">
+                <label for="estimatedTime" class="form-label">Settlement Time</label>
+                <input type="text" class="form-control" id="estimatedTime" readonly value="< 1 second">
+              </div>
+              <div class="info-item">
+                <label for="exchangeRate" class="form-label">Exchange Rate</label>
+                <input type="text" class="form-control" id="exchangeRate" readonly value="1 USD = 0.95 EUR">
+              </div>
+            </div>
+            
+            <button class="btn btn-primary w-100" type="submit" id="sendMoneyBtn">
+              <i class="fas fa-paper-plane me-2"></i>Send Payment via Flash
+            </button>
+          </form>
+          
+          <!-- Transaction Result -->
+          <div class="transaction-result" id="transactionResult">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-check-circle text-success me-2" style="font-size: 20px;"></i>
+              <div>
+                <h6 class="mb-0 text-success">Payment Successful!</h6>
+                <small class="text-muted">Transaction confirmed on Aptos blockchain</small>
+              </div>
+            </div>
+            <div class="transaction-details-result" id="transactionDetails"></div>
+            <div class="text-center">
+              <button class="btn btn-outline-primary btn-sm" onclick="newTransaction()">
+                <i class="fas fa-plus me-1"></i>Send Another Payment
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions Section -->
+      <div class="section-card">
+        <div class="section-header">
+          <i class="fas fa-history"></i>
+          <h5>Recent Transactions</h5>
+        </div>
+        <div class="section-body">
+          <div class="transaction-item">
+            <div class="transaction-header">
+              <span class="transaction-amount">$250.00 USD → EUR</span>
+              <span class="transaction-status status-completed">Completed</span>
+            </div>
+            <div class="transaction-details">
+              <div>To: 0x8ea67...c71b</div>
+              <div>2 hours ago • Fee: $1.25</div>
+            </div>
+          </div>
+          
+          <div class="transaction-item">
+            <div class="transaction-header">
+              <span class="transaction-amount">$500.00 USDC → USD</span>
+              <span class="transaction-status status-processing">Processing</span>
+            </div>
+            <div class="transaction-details">
+              <div>To: 0x1234...5678</div>
+              <div>1 day ago • Fee: $2.50</div>
+            </div>
+          </div>
+          
+          <div class="transaction-item">
+            <div class="transaction-header">
+              <span class="transaction-amount">$75.00 EUR → GBP</span>
+              <span class="transaction-status status-completed">Completed</span>
+            </div>
+            <div class="transaction-details">
+              <div>To: 0xabcd...efgh</div>
+              <div>3 days ago • Fee: $0.38</div>
             </div>
           </div>
         </div>
@@ -185,42 +614,73 @@
 
   <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
   <script>
-    // DOM Elements
     document.addEventListener('DOMContentLoaded', function() {
-      const demoPaymentForm = document.getElementById('demoPaymentForm');
-      const resultPanel = document.getElementById('resultPanel');
-      const transactionDetails = document.getElementById('transactionDetails');
-      const newTransactionBtn = document.getElementById('newTransactionBtn');
-      
-      // Get user info from localStorage
-      const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
+      // Check authentication
       const token = localStorage.getItem('flashsettle_token');
+      const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
+      
+      if (!token) {
+        window.location.href = '/login.html';
+        return;
+      }
       
       // Display user info
       document.getElementById('userName').textContent = user.name || 'Demo User';
       document.getElementById('userEmail').textContent = user.email || 'demo@flashsettle.com';
-      document.getElementById('userWallet').textContent = user.walletAddress || '0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b';
+      document.getElementById('userGreeting').textContent = `Welcome, ${user.name || 'Demo User'}`;
       
-      // API Base URL
-      const API_BASE_URL = '/api/v1';
+      // Form elements
+      const paymentForm = document.getElementById('paymentForm');
+      const paymentLoading = document.getElementById('paymentLoading');
+      const transactionResult = document.getElementById('transactionResult');
+      const transactionDetails = document.getElementById('transactionDetails');
+      
+      // Update converted amount and fees
+      function updateCalculations() {
+        const amount = parseFloat(document.getElementById('amount').value) || 0;
+        const sourceCurrency = document.getElementById('sourceCurrency').value;
+        const targetCurrency = document.getElementById('targetCurrency').value;
+        
+        // Calculate fee (0.5%)
+        const fee = amount * 0.005;
+        document.getElementById('fee').value = `$${fee.toFixed(2)} (0.5%)`;
+        
+        // Mock exchange rates
+        const rates = {
+          'USD-EUR': 0.95, 'USD-GBP': 0.82, 'USD-USDC': 1.00,
+          'EUR-USD': 1.05, 'EUR-GBP': 0.86, 'EUR-USDC': 1.05,
+          'GBP-USD': 1.22, 'GBP-EUR': 1.16, 'GBP-USDC': 1.22,
+          'USDC-USD': 1.00, 'USDC-EUR': 0.95, 'USDC-GBP': 0.82
+        };
+        
+        const rateKey = `${sourceCurrency}-${targetCurrency}`;
+        const rate = rates[rateKey] || 1;
+        const convertedAmount = (amount - fee) * rate;
+        
+        document.getElementById('convertedAmount').value = convertedAmount.toFixed(2);
+        document.getElementById('exchangeRate').value = `1 ${sourceCurrency} = ${rate} ${targetCurrency}`;
+      }
+      
+      // Event listeners for calculations
+      document.getElementById('amount').addEventListener('input', updateCalculations);
+      document.getElementById('sourceCurrency').addEventListener('change', updateCalculations);
+      document.getElementById('targetCurrency').addEventListener('change', updateCalculations);
       
       // Payment form submission
-      demoPaymentForm.addEventListener('submit', async function(e) {
+      paymentForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        if (!token) {
-          alert('Please login first!');
-          window.location.href = '/login.html';
-          return;
-        }
         
         const amount = document.getElementById('amount').value;
         const sourceCurrency = document.getElementById('sourceCurrency').value;
         const targetCurrency = document.getElementById('targetCurrency').value;
         const recipient = document.getElementById('recipientAddress').value;
         
+        // Show loading
+        paymentLoading.style.display = 'flex';
+        transactionResult.style.display = 'none';
+        
         try {
-          const response = await fetch(`${API_BASE_URL}/payments/send`, {
+          const response = await fetch('/api/v1/payments', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -236,88 +696,49 @@
           
           const data = await response.json();
           
-          if (response.ok && data.data) {
-            // Show transaction details
-            resultPanel.style.display = 'block';
-            
-            // Scroll to results
-            resultPanel.scrollIntoView({ behavior: 'smooth' });
-            
-            // Format and display transaction data
+          if (response.ok && data.success) {
+            // Show success
             const txDetails = {
-              id: data.data.paymentId,
+              paymentId: data.data.paymentId,
               amount: `${amount} ${sourceCurrency}`,
               recipient: recipient,
               recipientGets: `${document.getElementById('convertedAmount').value} ${targetCurrency}`,
               fee: document.getElementById('fee').value,
+              transactionHash: data.data.transactionHash,
               timestamp: new Date().toISOString(),
               status: 'completed',
-              blockchainTxHash: data.data.transactionHash || 'tx_simulated_hash',
-              onChainPaymentId: data.data.paymentId || 'payment_simulated_id'
+              network: 'Aptos Testnet'
             };
             
             transactionDetails.textContent = JSON.stringify(txDetails, null, 2);
+            transactionResult.style.display = 'block';
+            
           } else {
-            alert(`Payment failed: ${data.error || 'Unknown error'}`);
+            throw new Error(data.error || 'Payment failed');
           }
+          
         } catch (error) {
           console.error('Payment error:', error);
-          alert('Payment failed. Check server connection.');
+          alert(`Payment failed: ${error.message}`);
+        } finally {
+          paymentLoading.style.display = 'none';
         }
       });
       
-      // New transaction button
-      newTransactionBtn.addEventListener('click', function() {
-        resultPanel.style.display = 'none';
-        demoPaymentForm.reset();
-        
-        // Set default values
-        document.getElementById('amount').value = '100';
-        document.getElementById('convertedAmount').value = '95.00';
-        document.getElementById('recipientAddress').value = '0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b';
-      });
-      
-      // Update converted amount when source amount or currencies change
-      document.getElementById('amount').addEventListener('input', updateConvertedAmount);
-      document.getElementById('sourceCurrency').addEventListener('change', updateConvertedAmount);
-      document.getElementById('targetCurrency').addEventListener('change', updateConvertedAmount);
-      
-      function updateConvertedAmount() {
-        const amount = parseFloat(document.getElementById('amount').value) || 0;
-        const fee = amount * 0.005; // 0.5% fee
-        document.getElementById('fee').value = `${fee.toFixed(2)} USD (0.5%)`;
-        
-        // Simple conversion (in real app would use exchange rates)
-        let convertedAmount = amount - fee;
-        const sourceCurrency = document.getElementById('sourceCurrency').value;
-        const targetCurrency = document.getElementById('targetCurrency').value;
-        
-        // Apply mock exchange rates
-        if (sourceCurrency !== targetCurrency) {
-          const rates = {
-            'USD-EUR': 0.95,
-            'USD-GBP': 0.82,
-            'USD-USDC': 1,
-            'EUR-USD': 1.05,
-            'EUR-GBP': 0.86,
-            'EUR-USDC': 1.05,
-            'GBP-USD': 1.22,
-            'GBP-EUR': 1.16,
-            'GBP-USDC': 1.22,
-            'USDC-USD': 1,
-            'USDC-EUR': 0.95,
-            'USDC-GBP': 0.82
-          };
-          
-          const rateKey = `${sourceCurrency}-${targetCurrency}`;
-          if (rates[rateKey]) {
-            convertedAmount = convertedAmount * rates[rateKey];
-          }
-        }
-        
-        document.getElementById('convertedAmount').value = convertedAmount.toFixed(2);
-      }
+      // Initialize calculations
+      updateCalculations();
     });
+    
+    // New transaction function
+    function newTransaction() {
+      document.getElementById('transactionResult').style.display = 'none';
+      document.getElementById('paymentForm').reset();
+      document.getElementById('amount').value = '100';
+      document.getElementById('recipientAddress').value = '0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b';
+      
+      // Recalculate
+      document.getElementById('amount').dispatchEvent(new Event('input'));
+    }
     
     // Logout function
     function logout() {
