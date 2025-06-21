@@ -3,11 +3,14 @@ const { logger } = require('../../utils/logger');
 const { APIError } = require('../../api/middleware/errorHandler');
 
 // Initialize Aptos client with default devnet URL if not provided
-const nodeUrl = process.env.APTOS_NODE_URL || 'https://fullnode.devnet.aptoslabs.com/v1';
+const nodeUrl = process.env.APTOS_NODE_URL || 'https://fullnode.testnet.aptoslabs.com/v1';
 const client = new AptosClient(nodeUrl);
 
-// FlashSettle contract address - would be set based on deployment
+// FlashSettle contract address - should be set after deployment
 const FLASHSETTLE_ADDRESS = process.env.APTOS_ADDRESS || '0x1';
+
+// Enable real blockchain transactions vs mock
+const ENABLE_REAL_BLOCKCHAIN = process.env.ENABLE_REAL_BLOCKCHAIN === 'true';
 
 // Coin type mapping
 const COIN_TYPE_MAP = {
@@ -24,15 +27,22 @@ const COIN_TYPE_MAP = {
 const initializeWallet = () => {
   try {
     const privateKeyHex = process.env.APTOS_PRIVATE_KEY;
-    if (!privateKeyHex) {
-      throw new Error('Private key not configured');
+    if (!privateKeyHex || privateKeyHex === 'your_aptos_private_key_here') {
+      if (ENABLE_REAL_BLOCKCHAIN) {
+        throw new Error('Private key not configured for real blockchain operations');
+      }
+      // Return null for mock mode
+      return null;
     }
     
     const privateKeyBytes = HexString.ensure(privateKeyHex).toUint8Array();
     return new AptosAccount(privateKeyBytes);
   } catch (error) {
     logger.error('Failed to initialize wallet', { error: error.message });
-    throw new APIError('Blockchain wallet initialization failed', 500);
+    if (ENABLE_REAL_BLOCKCHAIN) {
+      throw new APIError('Blockchain wallet initialization failed', 500);
+    }
+    return null;
   }
 };
 
@@ -59,22 +69,63 @@ const submitPayment = async (payment) => {
     logger.debug('Submitting payment to blockchain', { 
       paymentId: payment.id,
       amount: payment.amount,
-      recipient: payment.recipient
+      recipient: payment.recipient,
+      realBlockchain: ENABLE_REAL_BLOCKCHAIN
     });
     
-    // In a real implementation, this would submit the transaction to the blockchain
-    // For now, we'll simulate a successful transaction
-    const txnHash = `0x${Array(64).fill('0').join('')}`;
+    if (!ENABLE_REAL_BLOCKCHAIN) {
+      // Mock transaction for development/testing
+      const txnHash = `0x${Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`;
+      
+      return {
+        hash: txnHash,
+        status: 'confirmed',
+        onChainPaymentId: payment.id
+      };
+    }
+    
+    // Real blockchain transaction
+    const account = initializeWallet();
+    if (!account) {
+      throw new Error('Wallet not initialized');
+    }
+    
+    const coinType = mapCurrencyToCoinType(payment.sourceCurrency || 'APT');
+    const onChainAmount = Math.floor(payment.amount * 1_000_000); // Convert to micro units
+    const onChainFee = Math.floor((payment.fee || 0) * 1_000_000);
+    
+    // Build transaction payload
+    const payload = {
+      function: `${FLASHSETTLE_ADDRESS}::flashsettle_module::create_payment`,
+      type_arguments: [coinType],
+      arguments: [payment.recipient, onChainAmount.toString(), onChainFee.toString()]
+    };
+    
+    // Submit transaction
+    const txnRequest = await client.generateTransaction(account.address(), payload);
+    const signedTxn = await client.signTransaction(account, txnRequest);
+    const transactionRes = await client.submitTransaction(signedTxn);
+    
+    // Wait for confirmation
+    await client.waitForTransaction(transactionRes.hash);
+    
+    logger.debug('Real blockchain payment submitted', { 
+      paymentId: payment.id, 
+      txnHash: transactionRes.hash
+    });
     
     return {
-      hash: txnHash,
+      hash: transactionRes.hash,
       status: 'confirmed',
-      onChainPaymentId: payment.id
+      onChainPaymentId: payment.id,
+      gasUsed: '1000' // Would get from transaction result
     };
+    
   } catch (error) {
     logger.error('Failed to submit payment to blockchain', {
       error: error.message,
-      paymentId: payment.id
+      paymentId: payment.id,
+      realBlockchain: ENABLE_REAL_BLOCKCHAIN
     });
     throw error;
   }
@@ -87,32 +138,43 @@ const submitPayment = async (payment) => {
  */
 const getTransactionStatus = async (txnHash) => {
   try {
-    logger.debug('Getting transaction status', { txnHash });
+    logger.debug('Getting transaction status', { txnHash, realBlockchain: ENABLE_REAL_BLOCKCHAIN });
     
-    // In a real implementation, this would check the transaction status on the blockchain
-    // For now, we'll simulate a successful transaction
+    if (!ENABLE_REAL_BLOCKCHAIN) {
+      // Mock status for development/testing
+      return {
+        status: 'confirmed',
+        timestamp: new Date().toISOString()
+      };
+    }
+    
+    // Real blockchain status check
+    const txnResult = await client.getTransactionByHash(txnHash);
+    
     return {
-      status: 'confirmed',
-      timestamp: new Date().toISOString()
+      status: txnResult.success ? 'confirmed' : 'failed',
+      timestamp: new Date(parseInt(txnResult.timestamp) / 1000).toISOString(),
+      gasUsed: txnResult.gas_used
     };
+    
   } catch (error) {
     logger.error('Failed to get transaction status', {
       error: error.message,
-      txnHash
+      txnHash,
+      realBlockchain: ENABLE_REAL_BLOCKCHAIN
     });
-    throw error;
+    
+    // Return unknown status if we can't fetch
+    return {
+      status: 'unknown',
+      timestamp: new Date().toISOString()
+    };
   }
 };
 
 /**
  * Create a payment on the blockchain
  * @param {Object} params - Payment parameters
- * @param {string} params.paymentId - Payment ID
- * @param {string} params.senderId - Sender ID
- * @param {number} params.amount - Payment amount
- * @param {number} params.fee - Fee amount
- * @param {string} params.recipient - Recipient address
- * @param {string} params.sourceCurrency - Source currency
  * @returns {Object} Transaction result
  */
 const createPayment = async ({
@@ -124,57 +186,73 @@ const createPayment = async ({
   sourceCurrency
 }) => {
   try {
-    logger.debug('Creating blockchain payment', { paymentId, amount, recipient, sourceCurrency });
+    logger.debug('Creating blockchain payment', { 
+      paymentId, 
+      amount, 
+      recipient, 
+      sourceCurrency,
+      realBlockchain: ENABLE_REAL_BLOCKCHAIN 
+    });
     
+    if (!ENABLE_REAL_BLOCKCHAIN) {
+      // Mock transaction for development/testing
+      const txnHash = `0x${Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`;
+      
+      return {
+        hash: txnHash,
+        status: 'confirmed',
+        gasUsed: '1000',
+        onChainPaymentId: `payment_${Math.floor(Math.random() * 1000000)}`
+      };
+    }
+    
+    // Real blockchain transaction
     const account = initializeWallet();
-    const coinType = mapCurrencyToCoinType(sourceCurrency);
+    if (!account) {
+      throw new Error('Wallet not initialized for real blockchain operations');
+    }
     
-    // Convert amount to on-chain units (e.g., from dollars to cents or smallest unit)
-    const onChainAmount = Math.floor(amount * 1_000_000); // Assuming 6 decimals
-    const onChainFee = Math.floor(fee * 1_000_000); // Assuming 6 decimals
+    const coinType = mapCurrencyToCoinType(sourceCurrency);
+    const onChainAmount = Math.floor(amount * 1_000_000); // Convert to micro units
+    const onChainFee = Math.floor(fee * 1_000_000);
     
     // Build transaction payload
     const payload = {
       function: `${FLASHSETTLE_ADDRESS}::flashsettle_module::create_payment`,
       type_arguments: [coinType],
-      arguments: [recipient, onChainAmount, onChainFee]
+      arguments: [recipient, onChainAmount.toString(), onChainFee.toString()]
     };
     
-    // For testing/hackathon purpose, we'll simulate the transaction
-    // In a production environment, you would use the actual blockchain methods
-    const txnHash = `0x${Array(64).fill(Math.floor(Math.random() * 16).toString(16)).join('')}`;
+    // Generate and submit transaction
+    const txnRequest = await client.generateTransaction(account.address(), payload);
+    const signedTxn = await client.signTransaction(account, txnRequest);
+    const transactionRes = await client.submitTransaction(signedTxn);
     
-    // Simulate transaction result
-    const txnResult = {
-      success: true,
-      gas_used: '1000',
-      version: '1'
-    };
+    // Wait for confirmation
+    const confirmedTxn = await client.waitForTransaction(transactionRes.hash);
     
-    logger.debug('Blockchain payment created', { 
+    logger.debug('Real blockchain payment created', { 
       paymentId, 
-      txnHash, 
-      status: txnResult.success ? 'success' : 'failed' 
+      txnHash: transactionRes.hash,
+      success: confirmedTxn.success
     });
     
-    if (!txnResult.success) {
+    if (!confirmedTxn.success) {
       throw new Error('Transaction failed on blockchain');
     }
     
-    // For testing/hackathon, simulate on-chain payment ID
-    let onChainPaymentId = `payment_${Math.floor(Math.random() * 1000000)}`;
-    
     return {
-      hash: txnHash,
-      status: txnResult.success ? 'confirmed' : 'failed',
-      gasUsed: txnResult.gas_used,
-      onChainPaymentId
+      hash: transactionRes.hash,
+      status: 'confirmed',
+      gasUsed: confirmedTxn.gas_used,
+      onChainPaymentId: paymentId
     };
+    
   } catch (error) {
     logger.error('Blockchain payment creation failed', { 
       error: error.message, 
       paymentId,
-      stack: error.stack
+      realBlockchain: ENABLE_REAL_BLOCKCHAIN
     });
     
     throw new APIError(`Blockchain payment failed: ${error.message}`, 500);
@@ -189,120 +267,166 @@ const createPayment = async ({
  */
 const cancelPayment = async (paymentId, txnHash) => {
   try {
-    logger.debug('Cancelling blockchain payment', { paymentId, txnHash });
+    logger.debug('Cancelling blockchain payment', { 
+      paymentId, 
+      txnHash,
+      realBlockchain: ENABLE_REAL_BLOCKCHAIN 
+    });
     
+    if (!ENABLE_REAL_BLOCKCHAIN) {
+      // Mock cancellation
+      const cancelTxnHash = `0x${Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`;
+      
+      return {
+        hash: cancelTxnHash,
+        status: 'confirmed'
+      };
+    }
+    
+    // Real blockchain cancellation
     const account = initializeWallet();
+    if (!account) {
+      throw new Error('Wallet not initialized for real blockchain operations');
+    }
     
-    // Build transaction payload
+    // Build cancellation payload
     const payload = {
       function: `${FLASHSETTLE_ADDRESS}::flashsettle_module::cancel_payment`,
-      type_arguments: [], // This would depend on specific contract requirements
+      type_arguments: [],
       arguments: [paymentId]
     };
     
-    // For testing/hackathon purpose, we'll simulate the transaction
-    // In a production environment, you would use the actual blockchain methods
-    const cancelTxnHash = `0x${Array(64).fill(Math.floor(Math.random() * 16).toString(16)).join('')}`;
+    // Generate and submit transaction
+    const txnRequest = await client.generateTransaction(account.address(), payload);
+    const signedTxn = await client.signTransaction(account, txnRequest);
+    const transactionRes = await client.submitTransaction(signedTxn);
     
-    // Simulate transaction result
-    const txnResult = {
-      success: true,
-      gas_used: '1000',
-      version: '1'
-    };
+    // Wait for confirmation
+    const confirmedTxn = await client.waitForTransaction(transactionRes.hash);
     
-    logger.debug('Blockchain payment cancelled', { 
+    logger.debug('Real blockchain payment cancelled', { 
       paymentId, 
-      txnHash: cancelTxnHash, 
-      status: txnResult.success ? 'success' : 'failed' 
+      cancelTxnHash: transactionRes.hash,
+      success: confirmedTxn.success
     });
     
-    if (!txnResult.success) {
-      throw new Error('Cancellation transaction failed on blockchain');
-    }
-    
     return {
-      hash: cancelTxnHash,
-      status: txnResult.success ? 'confirmed' : 'failed',
-      gasUsed: txnResult.gas_used
+      hash: transactionRes.hash,
+      status: confirmedTxn.success ? 'confirmed' : 'failed'
     };
+    
   } catch (error) {
     logger.error('Blockchain payment cancellation failed', { 
       error: error.message, 
       paymentId,
-      stack: error.stack
+      realBlockchain: ENABLE_REAL_BLOCKCHAIN
     });
     
-    throw new APIError(`Blockchain payment cancellation failed: ${error.message}`, 500);
+    throw new APIError(`Blockchain cancellation failed: ${error.message}`, 500);
   }
 };
 
 /**
- * Sponsor a transaction for gasless experience
- * @param {string} txnHash - Transaction hash to sponsor
- * @param {string} function_name - Function being called
- * @param {number} gasAmount - Gas amount to sponsor
- * @returns {Object} Sponsorship result
+ * Get account balance for a specific coin type
+ * @param {string} address - Account address
+ * @param {string} coinType - Coin type
+ * @returns {number} Balance
  */
-const sponsorTransaction = async (txnHash, function_name, gasAmount) => {
+const getAccountBalance = async (address, coinType) => {
   try {
-    logger.debug('Sponsoring transaction', { txnHash, function_name, gasAmount });
-    
-    const account = initializeWallet();
-    
-    // Convert txnHash to bytes
-    const txnHashBytes = HexString.ensure(txnHash).toUint8Array();
-    
-    // Build transaction payload
-    const payload = {
-      function: `${FLASHSETTLE_ADDRESS}::gas_station_module::sponsor_transaction`,
-      type_arguments: [],
-      arguments: [txnHashBytes, account.address().hex(), function_name, gasAmount]
-    };
-    
-    // For testing/hackathon purpose, we'll simulate the transaction
-    // In a production environment, you would use the actual blockchain methods
-    const sponsorTxnHash = `0x${Array(64).fill(Math.floor(Math.random() * 16).toString(16)).join('')}`;
-    
-    // Simulate transaction result
-    const txnResult = {
-      success: true,
-      gas_used: '1000',
-      version: '1'
-    };
-    
-    logger.debug('Transaction sponsored', { 
-      txnHash, 
-      sponsorTxnHash, 
-      status: txnResult.success ? 'success' : 'failed' 
-    });
-    
-    if (!txnResult.success) {
-      throw new Error('Sponsorship transaction failed on blockchain');
+    if (!ENABLE_REAL_BLOCKCHAIN) {
+      // Mock balance for testing
+      return 1000000; // 1 token with 6 decimals
     }
     
-    return {
-      hash: sponsorTxnHash,
-      status: txnResult.success ? 'confirmed' : 'failed',
-      gasUsed: txnResult.gas_used
-    };
+    const resources = await client.getAccountResources(address);
+    const coinStoreType = `0x1::coin::CoinStore<${coinType}>`;
+    const coinStore = resources.find(r => r.type === coinStoreType);
+    
+    if (!coinStore) {
+      return 0;
+    }
+    
+    return parseInt(coinStore.data.coin.value);
+    
   } catch (error) {
-    logger.error('Transaction sponsorship failed', { 
-      error: error.message, 
-      txnHash,
-      stack: error.stack
+    logger.error('Failed to get account balance', { error: error.message, address, coinType });
+    return 0;
+  }
+};
+
+/**
+ * Initialize contract stores (should be called after deployment)
+ * @param {string} coinType - Coin type to initialize
+ * @returns {Object} Transaction result
+ */
+const initializeContractStores = async (coinType = '0x1::aptos_coin::AptosCoin') => {
+  try {
+    if (!ENABLE_REAL_BLOCKCHAIN) {
+      logger.info('Skipping store initialization in mock mode');
+      return { success: true, message: 'Mock initialization' };
+    }
+    
+    const account = initializeWallet();
+    if (!account) {
+      throw new Error('Wallet not initialized');
+    }
+    
+    logger.info('Initializing contract stores', { coinType });
+    
+    // Initialize escrow store
+    const escrowPayload = {
+      function: `${FLASHSETTLE_ADDRESS}::escrow_module::initialize_escrow_store`,
+      type_arguments: [coinType],
+      arguments: []
+    };
+    
+    const escrowTxn = await client.generateTransaction(account.address(), escrowPayload);
+    const signedEscrowTxn = await client.signTransaction(account, escrowTxn);
+    const escrowRes = await client.submitTransaction(signedEscrowTxn);
+    await client.waitForTransaction(escrowRes.hash);
+    
+    // Initialize fee store
+    const feePayload = {
+      function: `${FLASHSETTLE_ADDRESS}::fee_module::initialize_fee_store`,
+      type_arguments: [coinType],
+      arguments: []
+    };
+    
+    const feeTxn = await client.generateTransaction(account.address(), feePayload);
+    const signedFeeTxn = await client.signTransaction(account, feeTxn);
+    const feeRes = await client.submitTransaction(signedFeeTxn);
+    await client.waitForTransaction(feeRes.hash);
+    
+    logger.info('Contract stores initialized successfully', { 
+      escrowTxn: escrowRes.hash,
+      feeTxn: feeRes.hash
     });
     
-    throw new APIError(`Transaction sponsorship failed: ${error.message}`, 500);
+    return {
+      success: true,
+      transactions: {
+        escrow: escrowRes.hash,
+        fee: feeRes.hash
+      }
+    };
+    
+  } catch (error) {
+    logger.error('Failed to initialize contract stores', { error: error.message });
+    throw new APIError(`Store initialization failed: ${error.message}`, 500);
   }
 };
 
 module.exports = {
-  client,
-  submitPayment,
-  getTransactionStatus,
   createPayment,
+  getTransactionStatus,
   cancelPayment,
-  sponsorTransaction,
-  mapCurrencyToCoinType
+  getAccountBalance,
+  initializeContractStores,
+  submitPayment,
+  initializeWallet,
+  mapCurrencyToCoinType,
+  client,
+  FLASHSETTLE_ADDRESS,
+  ENABLE_REAL_BLOCKCHAIN
 }; 
