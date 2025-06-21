@@ -10,7 +10,7 @@ const client = new AptosClient(nodeUrl);
 const FLASHSETTLE_ADDRESS = process.env.APTOS_ADDRESS || '0x1';
 
 // Enable real blockchain transactions vs mock
-const ENABLE_REAL_BLOCKCHAIN = false; // Temporarily hardcoded for demo
+const ENABLE_REAL_BLOCKCHAIN = process.env.ENABLE_REAL_BLOCKCHAIN === 'true';
 
 // Debug logging for environment variable
 logger.info('Blockchain service initialized', { 
