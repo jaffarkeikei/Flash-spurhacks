@@ -5,12 +5,12 @@ authors = ["FlashSettle Developers"]
 license = "MIT"
 
 [addresses]
-flashsettle = "0xc4b383aa7ef8e2f7d37e6438b2b3db43ef0b85cc0ff244cd68c66cbed63ccf20"
+flashsettle = "_"
 
 [dev-addresses]
 flashsettle = "0x8ea67eda95f0d3237e79447b1b8f12efc59a9a6d934900faa3cf9a5e46d6c71b"
 
 [dependencies]
-AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework/", rev = "main" }
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework/", rev = "testnet" }
 
 [dev-dependencies] 
