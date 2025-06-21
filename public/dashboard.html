@@ -834,6 +834,19 @@
       ]
     };
 
+    // --- Local Storage Persistence ---
+    function saveUserStats() {
+      localStorage.setItem('flash_userStats', JSON.stringify(userStats));
+    }
+    function loadUserStats() {
+      const saved = localStorage.getItem('flash_userStats');
+      if (saved) {
+        userStats = JSON.parse(saved);
+      }
+    }
+    // Load stats from localStorage if available
+    loadUserStats();
+
     // Render stats and transactions
     function renderStats() {
       document.getElementById('accountBalance').textContent = `$${userStats.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
@@ -851,17 +864,17 @@
         return;
       }
       container.innerHTML = userStats.transactions.slice(0, 5).map(tx => `
-        <div class="transaction-item">
-          <div class="transaction-header">
-            <span class="transaction-amount">$${tx.amount.toFixed(2)} ${tx.source} → ${tx.target}</span>
-            <span class="transaction-status status-${tx.status.toLowerCase()}">${tx.status}</span>
+          <div class="transaction-item">
+            <div class="transaction-header">
+              <span class="transaction-amount">$${tx.amount.toFixed(2)} ${tx.source} → ${tx.target}</span>
+              <span class="transaction-status status-${tx.status.toLowerCase()}">${tx.status}</span>
+            </div>
+            <div class="transaction-details">
+              <div>To: ${tx.to}</div>
+              <div>${tx.time} • Fee: $${tx.fee.toFixed(2)}</div>
+            </div>
           </div>
-          <div class="transaction-details">
-            <div>To: ${tx.to}</div>
-            <div>${tx.time} • Fee: $${tx.fee.toFixed(2)}</div>
-          </div>
-        </div>
-      `).join('');
+        `).join('');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -933,6 +946,12 @@
         const fee = parseFloat(feeStr.replace(/[^0-9.]/g, '')) || 0;
         const recipientGets = document.getElementById('convertedAmount').value;
 
+        // Check if user has enough balance
+        if (userStats.balance < (amount + fee)) {
+          alert('Insufficient balance to perform this transaction.');
+          return;
+        }
+        
         // Show loading
         paymentLoading.style.display = 'flex';
 
@@ -983,6 +1002,7 @@
               time: 'just now',
               fee: fee
             });
+            saveUserStats(); // Save to localStorage
             renderStats();
             renderTransactions();
 
@@ -1006,27 +1026,27 @@
     function showSuccessModal(txData) {
       // Populate transaction summary
       const summaryHTML = `
-        <div class="summary-row">
-          <span class="summary-label">Amount Sent</span>
-          <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Recipient Gets</span>
-          <span class="summary-value">${txData.recipientGets} ${txData.targetCurrency}</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Network Fee</span>
-          <span class="summary-value">${txData.fee}</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Transaction Hash</span>
-          <span class="summary-value" style="font-family: monospace; font-size: 12px; word-break: break-all;">${txData.transactionHash}</span>
-        </div>
-        <div class="summary-row">
-          <span class="summary-label">Total Cost</span>
-          <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
-        </div>
-      `;
+          <div class="summary-row">
+            <span class="summary-label">Amount Sent</span>
+            <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Recipient Gets</span>
+            <span class="summary-value">${txData.recipientGets} ${txData.targetCurrency}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Network Fee</span>
+            <span class="summary-value">${txData.fee}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Transaction Hash</span>
+            <span class="summary-value" style="font-family: monospace; font-size: 12px; word-break: break-all;">${txData.transactionHash}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Total Cost</span>
+            <span class="summary-value">${txData.amount} ${txData.sourceCurrency}</span>
+          </div>
+        `;
 
       document.getElementById('transactionSummary').innerHTML = summaryHTML;
       document.getElementById('transactionDetailsModal').textContent = JSON.stringify(txData, null, 2);
@@ -1062,6 +1082,7 @@
     function logout() {
       localStorage.removeItem('flashsettle_token');
       localStorage.removeItem('flashsettle_user');
+      localStorage.removeItem('flash_userStats'); // Clear stats on logout
       window.location.href = '/login.html';
     }
   </script>
