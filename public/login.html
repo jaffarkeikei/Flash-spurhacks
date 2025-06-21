@@ -456,35 +456,65 @@
                 }
                 
                 try {
-                    // Generate filename with timestamp
-                    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                    const filename = `user_photo_${timestamp}.jpg`;
+                    // Show saving status
+                    cameraStatus.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading photo...';
+                    savePhotoBtn.disabled = true;
+                    
+                    console.log('Starting photo upload...');
+                    console.log('Captured photo data length:', capturedPhotoData.length);
                     
                     // Convert base64 to blob
-                    const response = await fetch(capturedPhotoData);
-                    const blob = await response.blob();
+                    const base64Data = capturedPhotoData.split(',')[1];
+                    const byteCharacters = atob(base64Data);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'image/jpeg' });
                     
-                    // Create download link
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = URL.createObjectURL(blob);
-                    downloadLink.download = filename;
+                    console.log('Blob created:', blob);
+                    console.log('Blob size:', blob.size);
+                    console.log('Blob type:', blob.type);
                     
-                    // Trigger download
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
+                    // Create FormData for upload
+                    const formData = new FormData();
+                    formData.append('photo', blob, 'user_photo.jpg');
                     
-                    // Update status
-                    cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo saved successfully!';
+                    console.log('FormData created, uploading...');
                     
-                    // Close modal after short delay
-                    setTimeout(() => {
-                        cameraModal.hide();
-                    }, 2000);
+                    // Upload to server
+                    const uploadResponse = await fetch('/api/v1/photos/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    console.log('Upload response status:', uploadResponse.status);
+                    
+                    const uploadResult = await uploadResponse.json();
+                    console.log('Upload result:', uploadResult);
+                    
+                    if (uploadResponse.ok && uploadResult.success) {
+                        // Update status
+                        cameraStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Photo uploaded successfully! Redirecting to dashboard...';
+                        
+                        // Store photo info in localStorage (optional)
+                        localStorage.setItem('flashsettle_user_photo', JSON.stringify(uploadResult.data));
+                        
+                        // Close modal and redirect after short delay
+                        setTimeout(() => {
+                            cameraModal.hide();
+                            window.location.href = '/dashboard.html';
+                        }, 2000);
+                        
+                    } else {
+                        throw new Error(uploadResult.error || 'Upload failed');
+                    }
                     
                 } catch (error) {
                     console.error('Save photo error:', error);
-                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Error saving photo. Please try again.';
+                    cameraStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Error uploading photo. Please try again.';
+                    savePhotoBtn.disabled = false;
                 }
             });
         });

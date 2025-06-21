@@ -1,13 +1,44 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const multer = require('multer');
+const fs = require('fs');
 
 const app = express();
 const PORT = 3001; // Using different port to avoid conflicts
 
+// Ensure photos directory exists
+const photosDir = path.join(__dirname, 'public', 'assets', 'photos');
+if (!fs.existsSync(photosDir)) {
+  fs.mkdirSync(photosDir, { recursive: true });
+}
+
+// Configure multer for photo uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, photosDir);
+  },
+  filename: function (req, file, cb) {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    cb(null, `user_photo_${timestamp}.jpg`);
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: function (req, file, cb) {
+    console.log('File filter check:', file);
+    // Accept any file for now to debug
+    cb(null, true);
+  }
+});
+
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 
 // Mock API endpoints for frontend development
@@ -78,6 +109,61 @@ app.get('/api/v1/rates/convert', (req, res) => {
       timestamp: new Date().toISOString()
     }
   });
+});
+
+// Photo upload endpoint
+app.post('/api/v1/photos/upload', upload.single('photo'), (req, res) => {
+  console.log('Photo upload request received');
+  console.log('Request body:', req.body);
+  console.log('Request file:', req.file);
+  
+  try {
+    if (!req.file) {
+      console.log('No file in request');
+      return res.status(400).json({
+        success: false,
+        error: 'No photo file provided'
+      });
+    }
+
+    console.log('File uploaded successfully:', req.file);
+    res.json({
+      success: true,
+      message: 'Photo uploaded successfully',
+      data: {
+        filename: req.file.filename,
+        path: `/assets/photos/${req.file.filename}`,
+        size: req.file.size,
+        mimetype: req.file.mimetype,
+        uploadedAt: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Photo upload error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to upload photo'
+    });
+  }
+});
+
+// Handle multer errors
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        success: false,
+        error: 'File too large. Maximum size is 10MB.'
+      });
+    }
+  }
+  if (error.message === 'Only image files are allowed!') {
+    return res.status(400).json({
+      success: false,
+      error: 'Only image files are allowed!'
+    });
+  }
+  next(error);
 });
 
 // Health check

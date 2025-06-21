@@ -20,6 +20,7 @@
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.1",
     "morgan": "^1.10.0",
+    "multer": "^2.0.1",
     "pg": "^8.11.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.32.1",
@@ -36,4 +37,4 @@
     "node": ">=16.0.0"
   },
   "license": "MIT"
-} 
+}
