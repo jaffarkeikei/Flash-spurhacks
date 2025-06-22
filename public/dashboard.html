@@ -633,8 +633,8 @@
       }
   
       .user-info-card {
-        flex-direction: column;
-        text-align: center;
+        /* flex-direction: column;
+        text-align: center; */
         gap: 15px;
         padding: 20px;
       }
@@ -778,9 +778,16 @@
       }
     }
 
-    /* overide boostrap dropdown positioning */
+    /* override boostrap dropdown positioning */
     .navbar-nav .dropdown-menu{
       position: absolute;
+    }
+
+    /* override boostrap balance-info positioning */
+    @media (max-width: 768px) {
+      .balance-info {
+          text-align: right;
+      }
     }
   </style>
 </head>
