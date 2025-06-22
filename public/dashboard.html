@@ -1278,8 +1278,15 @@
       // Check authentication
       const token = localStorage.getItem('flashsettle_token');
       const user = JSON.parse(localStorage.getItem('flashsettle_user') || '{}');
+      
+      // Debug: log token status
+      console.log('🔍 Dashboard token check:', token ? 'Token found' : 'No token');
+      console.log('🔍 Token value:', token);
+      console.log('🔍 Current URL:', window.location.href);
+      console.log('🔍 API Base URL:', window.location.origin + '/api/v1');
         
         if (!token) {
+          console.log('❌ No token found, redirecting to login');
           window.location.href = '/login.html';
           return;
         }
@@ -1365,6 +1372,10 @@
         
         // Show loading
         paymentLoading.style.display = 'flex';
+        
+        // Debug: log payment request details
+        console.log('💳 Starting payment with token:', token ? 'Token present' : 'No token');
+        console.log('💳 Authorization header:', `Bearer ${token}`);
         
         try {
           const response = await fetch('/api/v1/payments', {

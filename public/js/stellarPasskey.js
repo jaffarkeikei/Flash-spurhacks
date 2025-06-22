@@ -91,20 +91,68 @@ class StellarPasskeyAuth {
     try {
       console.log('Starting Stellar passkey registration for:', userInfo.email);
       
-      // For demo purposes, simulate successful registration
-      const mockCredentialId = this.generateMockCredentialId();
+      // Create WebAuthn registration options
+      const publicKeyCredentialCreationOptions = {
+        challenge: new Uint8Array(32),
+        rp: {
+          name: "Flash - Instant Cross-Border Payments",
+          id: window.location.hostname,
+        },
+        user: {
+          id: new TextEncoder().encode(userInfo.email),
+          name: userInfo.email,
+          displayName: userInfo.name || userInfo.email.split('@')[0],
+        },
+        pubKeyCredParams: [{alg: -7, type: "public-key"}],
+        authenticatorSelection: {
+          authenticatorAttachment: "platform",
+          userVerification: "required"
+        },
+        timeout: 60000,
+        attestation: "direct"
+      };
+
+      // Fill challenge with random data
+      window.crypto.getRandomValues(publicKeyCredentialCreationOptions.challenge);
+
+      // Call WebAuthn API
+      const credential = await navigator.credentials.create({
+        publicKey: publicKeyCredentialCreationOptions
+      });
+
+      if (!credential) {
+        throw new Error('Failed to create passkey credential');
+      }
+
+      console.log('✅ Passkey credential created successfully:', credential.id);
+      
+      // After successful passkey creation, we'll use the existing demo user
+      // In a real implementation, this would register the passkey with the user account
+      console.log('🔐 Passkey registered successfully for user:', userInfo.email);
+
+      // Mock Stellar transaction for demo
       const mockStellarTx = `stellar_${Date.now()}_${Math.random().toString(36)}`;
       
       return {
         success: true,
-        credentialId: mockCredentialId,
+        credentialId: credential.id,
         stellarTransaction: mockStellarTx,
         message: 'Stellar Passkey registered successfully!'
       };
 
     } catch (error) {
       console.error('Passkey registration failed:', error);
-      throw error;
+      
+      // Handle specific WebAuthn errors
+      if (error.name === 'NotSupportedError') {
+        throw new Error('Passkeys are not supported on this device');
+      } else if (error.name === 'NotAllowedError') {
+        throw new Error('Passkey registration was cancelled or not allowed');
+      } else if (error.name === 'InvalidStateError') {
+        throw new Error('A passkey already exists for this account');
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -121,26 +169,80 @@ class StellarPasskeyAuth {
     try {
       console.log('Starting Stellar passkey authentication for:', email);
       
-      // For demo purposes, simulate successful authentication
+      // Create WebAuthn authentication options
+      const publicKeyCredentialRequestOptions = {
+        challenge: new Uint8Array(32),
+        allowCredentials: [], // Allow any credential
+        userVerification: "required",
+        timeout: 60000,
+      };
+
+      // Fill challenge with random data
+      window.crypto.getRandomValues(publicKeyCredentialRequestOptions.challenge);
+
+      // Call WebAuthn API
+      const assertion = await navigator.credentials.get({
+        publicKey: publicKeyCredentialRequestOptions
+      });
+
+      if (!assertion) {
+        throw new Error('Failed to authenticate with passkey');
+      }
+
+      console.log('✅ Passkey authentication successful:', assertion.id);
+      
+      // After successful biometric authentication, call the real login API
+      // to get a valid JWT token
+      console.log('🔐 Calling backend login API for JWT token...');
+      
+      const loginResponse = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          password: 'password123' // Demo password for passkey users
+        })
+      });
+
+      if (!loginResponse.ok) {
+        throw new Error('Failed to authenticate with backend');
+      }
+
+      const loginData = await loginResponse.json();
+      
+      if (!loginData.success) {
+        throw new Error(loginData.error || 'Authentication failed');
+      }
+
+      console.log('✅ Backend authentication successful, received JWT token');
+      
+      // Mock Stellar transaction for demo
       const mockStellarTx = `stellar_auth_${Date.now()}_${Math.random().toString(36)}`;
-      const mockAccessToken = `stellar_token_${Date.now()}`;
       
       return {
         success: true,
-        user: {
-          id: 'stellar_user_1',
-          name: email.split('@')[0],
-          email: email,
-          role: 'user'
-        },
-        accessToken: mockAccessToken,
+        user: loginData.data.user,
+        accessToken: loginData.data.accessToken, // Real JWT token from backend
+        refreshToken: loginData.data.refreshToken,
         stellarTransaction: mockStellarTx,
         message: 'Authentication successful via Stellar passkey!'
       };
 
     } catch (error) {
       console.error('Passkey authentication failed:', error);
-      throw error;
+      
+      // Handle specific WebAuthn errors
+      if (error.name === 'NotSupportedError') {
+        throw new Error('Passkeys are not supported on this device');
+      } else if (error.name === 'NotAllowedError') {
+        throw new Error('Passkey authentication was cancelled or not allowed');
+      } else if (error.name === 'InvalidStateError') {
+        throw new Error('No passkey found for this account');
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -151,11 +253,27 @@ class StellarPasskeyAuth {
    */
   async hasPasskey(email) {
     try {
-      // For demo purposes, return true for certain emails
-      return email.includes('demo') || email.includes('stellar');
+      // Check localStorage for registered passkeys (demo implementation)
+      const registeredPasskeys = JSON.parse(localStorage.getItem('flash_registered_passkeys') || '[]');
+      return registeredPasskeys.includes(email);
     } catch (error) {
       console.error('Failed to check passkey status:', error);
       return false;
+    }
+  }
+
+  /**
+   * Store passkey registration status
+   */
+  storePasskeyRegistration(email) {
+    try {
+      const registeredPasskeys = JSON.parse(localStorage.getItem('flash_registered_passkeys') || '[]');
+      if (!registeredPasskeys.includes(email)) {
+        registeredPasskeys.push(email);
+        localStorage.setItem('flash_registered_passkeys', JSON.stringify(registeredPasskeys));
+      }
+    } catch (error) {
+      console.error('Failed to store passkey registration:', error);
     }
   }
 

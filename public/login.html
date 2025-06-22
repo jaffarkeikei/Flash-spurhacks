@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flash - Login</title>
+    <title>Flash - Login | Instant Cross-Border Payments</title>
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/vendor/fontawesome/all.min.css">
     <style>
@@ -195,6 +195,130 @@
         .password-field {
             position: relative;
         }
+        
+        .btn-passkey {
+            width: 100%;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .btn-passkey:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(72, 187, 120, 0.4);
+        }
+        
+        .btn-passkey:disabled {
+            opacity: 0.7;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .passkey-icon {
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        
+        .divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 16px;
+            color: #718096;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .passkey-message {
+            background: linear-gradient(135deg, #e6fffa, #b2f5ea);
+            color: #234e52;
+            border: 2px solid #81e6d9;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .traditional-login {
+            transition: all 0.3s ease;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .passkey-benefits {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 20px 0;
+            padding: 16px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 12px;
+        }
+        
+        .passkey-benefit {
+            flex: 1;
+        }
+        
+        .passkey-benefit i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .passkey-benefit small {
+            font-size: 12px;
+            color: #718096;
+            font-weight: 500;
+        }
+        
+        .btn-link {
+            background: none;
+            border: none;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #5a67d8;
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -218,7 +342,33 @@
                 <i class="fas fa-exclamation-triangle me-2"></i>Login failed. Please try again.
             </div>
             
-            <div class="form-section">
+            <div class="passkey-message" id="passkeyMessage" style="display: none;">
+                <i class="fas fa-fingerprint me-2"></i>Use your biometric authentication
+            </div>
+            
+            <!-- Stellar Passkey Authentication Section -->
+            <div id="passkeySection" style="display: none;">
+                <button type="button" class="btn-passkey" id="passkeyBtn">
+                    <i class="fas fa-fingerprint passkey-icon"></i>
+                    <span id="passkeyBtnText">Sign in with TouchID/FaceID</span>
+                    <span class="loading-spinner spinner-border spinner-border-sm" id="passkeySpinner"></span>
+                </button>
+                
+                <div class="text-center mt-3">
+                    <button type="button" class="btn-link" id="showTraditionalBtn">
+                        <i class="fas fa-key me-2"></i>Use traditional login instead
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Traditional Login Form (Hidden by default) -->
+            <div class="form-section traditional-login" id="traditionalLogin" style="display: none;">
+                <div class="text-center mb-3">
+                    <button type="button" class="btn-link" id="backToPasskeyBtn">
+                        <i class="fas fa-arrow-left me-2"></i>Back to biometric login
+                    </button>
+                </div>
+                
                 <form id="loginForm">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
@@ -240,20 +390,180 @@
                         <i class="fas fa-sign-in-alt me-2"></i>Access Flash Dashboard
                     </button>
                 </form>
+                
+                <!-- Demo Info -->
+                <div class="demo-info">
+                    <h6><i class="fas fa-info-circle me-2"></i>Demo Credentials</h6>
+                    <div class="demo-credentials">
+                        <strong>Email:</strong>
+                        <span>demo@flashsettle.com</span>
+                    </div>
+                    <div class="demo-credentials">
+                        <strong>Password:</strong>
+                        <span>password123</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/js/stellarPasskey.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Stellar Passkey Auth
+            const stellarAuth = new StellarPasskeyAuth();
+            
             const loginForm = document.getElementById('loginForm');
             const loginBtn = document.getElementById('loginBtn');
             const loadingSpinner = document.getElementById('loadingSpinner');
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
+            const passkeyMessage = document.getElementById('passkeyMessage');
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
+            const emailInput = document.getElementById('email');
+            
+            // Passkey elements
+            const passkeySection = document.getElementById('passkeySection');
+            const passkeyBtn = document.getElementById('passkeyBtn');
+            const passkeyBtnText = document.getElementById('passkeyBtnText');
+            const passkeySpinner = document.getElementById('passkeySpinner');
+            const traditionalLogin = document.getElementById('traditionalLogin');
+            
+            // UI navigation elements
+            const showTraditionalBtn = document.getElementById('showTraditionalBtn');
+            const backToPasskeyBtn = document.getElementById('backToPasskeyBtn');
+            
+            // Check if passkeys are supported and show the option
+            if (stellarAuth.isSupported) {
+                console.log('✅ Stellar Passkeys supported - showing biometric login option');
+                passkeySection.style.display = 'block';
+                
+                // Check if user has existing passkey
+                const email = emailInput.value;
+                const hasExistingPasskey = await stellarAuth.hasPasskey(email);
+                
+                if (hasExistingPasskey) {
+                    passkeyBtnText.textContent = 'Sign in with TouchID/FaceID';
+                    passkeyMessage.style.display = 'block';
+                    passkeyMessage.innerHTML = '<i class="fas fa-fingerprint me-2"></i>Ready for biometric authentication';
+                } else {
+                    passkeyBtnText.textContent = 'Set up TouchID/FaceID';
+                }
+            } else {
+                console.log('❌ Stellar Passkeys not supported in this browser');
+                traditionalLogin.style.display = 'block';
+            }
+            
+            // Handle navigation between passkey and traditional login
+            showTraditionalBtn.addEventListener('click', function() {
+                passkeySection.style.display = 'none';
+                traditionalLogin.style.display = 'block';
+                hideMessages();
+            });
+            
+            backToPasskeyBtn.addEventListener('click', function() {
+                traditionalLogin.style.display = 'none';
+                passkeySection.style.display = 'block';
+                hideMessages();
+            });
+            
+            // Handle passkey authentication
+            passkeyBtn.addEventListener('click', async function() {
+                const email = emailInput.value;
+                
+                // Show loading state
+                passkeyBtn.disabled = true;
+                passkeySpinner.style.display = 'inline-block';
+                passkeyBtnText.textContent = 'Authenticating...';
+                hideMessages();
+                
+                try {
+                    // Check if user has existing passkey
+                    const hasExistingPasskey = await stellarAuth.hasPasskey(email);
+                    
+                    if (hasExistingPasskey) {
+                        // Authenticate with existing passkey
+                        passkeyMessage.style.display = 'block';
+                        passkeyMessage.innerHTML = '<i class="fas fa-fingerprint me-2"></i>Touch sensor or look at camera for Face ID...';
+                        
+                        const authResult = await stellarAuth.authenticatePasskey(email);
+                        
+                        if (authResult.success) {
+                            // Store authentication data
+                            localStorage.setItem('flashsettle_token', authResult.accessToken);
+                            localStorage.setItem('flashsettle_user', JSON.stringify(authResult.user));
+                            localStorage.setItem('flashsettle_auth_method', 'stellar_passkey');
+                            if (authResult.refreshToken) {
+                                localStorage.setItem('flashsettle_refresh_token', authResult.refreshToken);
+                            }
+                            
+                            // Debug: verify token is stored
+                            console.log('✅ Passkey login token stored:', authResult.accessToken);
+                            
+                            // Show success message
+                            successMessage.style.display = 'block';
+                            successMessage.innerHTML = '<i class="fas fa-check-circle me-2"></i>Stellar Passkey authentication successful! Redirecting...';
+                            
+                            // Redirect after short delay
+                            setTimeout(() => {
+                                window.location.href = '/dashboard.html';
+                            }, 1500);
+                        }
+                    } else {
+                        // Register new passkey
+                        passkeyMessage.style.display = 'block';
+                        passkeyMessage.innerHTML = '<i class="fas fa-fingerprint me-2"></i>Setting up your Stellar Passkey...';
+                        
+                        const userInfo = {
+                            email: email,
+                            name: email.split('@')[0]
+                        };
+                        
+                        const registerResult = await stellarAuth.registerPasskey(userInfo);
+                        
+                        if (registerResult.success) {
+                            // Store passkey registration
+                            stellarAuth.storePasskeyRegistration(email);
+                            
+                            successMessage.style.display = 'block';
+                            successMessage.innerHTML = '<i class="fas fa-check-circle me-2"></i>TouchID/FaceID setup complete! You can now use biometric login.';
+                            
+                            // Update button text for future logins
+                            passkeyBtnText.textContent = 'Sign in with TouchID/FaceID';
+                            
+                            // Auto-login after registration
+                            setTimeout(async () => {
+                                try {
+                                    const authResult = await stellarAuth.authenticatePasskey(email);
+                                    if (authResult.success) {
+                                        localStorage.setItem('flashsettle_token', authResult.accessToken);
+                                        localStorage.setItem('flashsettle_user', JSON.stringify(authResult.user));
+                                        localStorage.setItem('flashsettle_auth_method', 'stellar_passkey');
+                                        
+                                        window.location.href = '/dashboard.html';
+                                    }
+                                } catch (error) {
+                                    console.error('Auto-login failed:', error);
+                                    // Just update the UI, don't show error since registration was successful
+                                    passkeyMessage.innerHTML = '<i class="fas fa-check-circle me-2"></i>Setup complete! Click the button above to sign in.';
+                                }
+                            }, 2000);
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('Passkey authentication failed:', error);
+                    errorMessage.style.display = 'block';
+                    errorMessage.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Passkey authentication failed. Please try again or use traditional login.';
+                } finally {
+                    // Reset button state
+                    passkeyBtn.disabled = false;
+                    passkeySpinner.style.display = 'none';
+                    passkeyBtnText.textContent = 'Sign in with TouchID/FaceID';
+                }
+            });
             
             // Toggle password visibility
             togglePassword.addEventListener('click', function() {
@@ -268,18 +578,17 @@
                 }
             });
             
-            // Handle login form submission
+            // Handle traditional login form submission
             loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
+                const email = emailInput.value;
+                const password = passwordInput.value;
                 
                 // Show loading state
                 loginBtn.disabled = true;
                 loadingSpinner.style.display = 'inline-block';
-                successMessage.style.display = 'none';
-                errorMessage.style.display = 'none';
+                hideMessages();
                 
                 try {
                     // Make API call to login
@@ -297,6 +606,10 @@
                         // Store authentication data
                         localStorage.setItem('flashsettle_token', data.data.accessToken);
                         localStorage.setItem('flashsettle_user', JSON.stringify(data.data.user));
+                        localStorage.setItem('flashsettle_auth_method', 'traditional');
+                        
+                        // Debug: verify token is stored
+                        console.log('✅ Traditional login token stored:', data.data.accessToken);
                         
                         // Show success message
                         successMessage.style.display = 'block';
@@ -319,8 +632,16 @@
                     loadingSpinner.style.display = 'none';
                 }
             });
+            
+            // Helper function to hide all messages
+            function hideMessages() {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                passkeyMessage.style.display = 'none';
+            }
         });
     </script>
 </body>
 
+</html>
 </html>
