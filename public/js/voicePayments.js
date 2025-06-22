@@ -243,6 +243,8 @@ class VoicePaymentSystem {
    * Get user's name for personalized greetings
    */
   getUserName() {
+    console.log('🔍 getUserName() called, currentUser:', this.currentUser);
+    
     // First try to get name from the dashboard display (top left corner)
     const userNameElement = document.querySelector('.user-details h5');
     if (userNameElement && userNameElement.textContent.trim()) {
@@ -253,12 +255,36 @@ class VoicePaymentSystem {
     
     // Fallback to localStorage user data
     if (this.currentUser.firstName) {
+      console.log('📝 Using firstName:', this.currentUser.firstName);
       return this.currentUser.firstName;
     } else if (this.currentUser.username) {
+      console.log('📝 Using username:', this.currentUser.username);
       return this.currentUser.username;
+    } else if (this.currentUser.name) {
+      // If there's a full name, extract the first name
+      const firstName = this.currentUser.name.split(' ')[0];
+      console.log('📝 Using first part of name:', firstName, 'from full name:', this.currentUser.name);
+      return firstName;
     } else if (this.currentUser.email) {
-      return this.currentUser.email.split('@')[0];
+      // For demo users, provide more appropriate names based on email
+      const emailPrefix = this.currentUser.email.split('@')[0];
+      console.log('📝 Email prefix extracted:', emailPrefix, 'from email:', this.currentUser.email);
+      
+      const demoNameMapping = {
+        'demo': 'User',
+        'alice': 'Alice', 
+        'bob': 'Bob',
+        'test': 'Tester',
+        'admin': 'Admin'
+      };
+      
+      const mappedName = demoNameMapping[emailPrefix.toLowerCase()] || 
+                        emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
+      console.log('📝 Mapped name result:', mappedName);
+      return mappedName;
     }
+    
+    console.log('📝 No name found, returning null');
     return null;
   }
 

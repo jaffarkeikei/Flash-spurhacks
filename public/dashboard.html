@@ -975,7 +975,7 @@
     <!-- User Info Card -->
     <div class="user-info-card">
       <div class="user-details">
-        <h5><i class="fas fa-user me-2"></i><span id="userName">Demo User</span></h5>
+                      <h5><i class="fas fa-user me-2"></i><span id="userName">Alice</span></h5>
         <small><i class="fas fa-envelope me-1"></i><span id="userEmail">demo@flashsettle.com</span></small>
         <small class="d-block"><i class="fas fa-wallet me-1"></i>Wallet: <span class="wallet-address">0x8ea67e...c71b</span></small>
       </div>
@@ -1410,7 +1410,7 @@
       const walletDisplay = userStats.walletAddress.slice(0, 8) + '...' + userStats.walletAddress.slice(-4);
       document.querySelector('.wallet-address').textContent = walletDisplay;
       
-      // Re-render stats and transactions
+      // Re-render stats and xtransactions
       renderStats();
       renderTransactions();
       
@@ -1496,13 +1496,22 @@
       // Load current account
       loadUserStats();
       
-      // Set initial UI state
-      document.getElementById('currentAccountName').textContent = userStats.name;
-      document.getElementById('userDisplay').innerHTML = `<i class="fas fa-user-circle me-1"></i>${userStats.email}`;
+      // Debug: Check what name we're getting
+      console.log('🔍 Current userStats:', userStats);
+      console.log('🔍 User from localStorage:', user);
+      console.log('🔍 User name should be:', userStats.name.split(' ')[0]);
       
-      // Update user info card
-      document.getElementById('userName').textContent = userStats.name.split(' ')[0];
-      document.getElementById('userEmail').textContent = userStats.email;
+      // Set initial UI state - use actual logged-in user data if available
+      const displayName = user.name || userStats.name;
+      const displayEmail = user.email || userStats.email;
+      
+      document.getElementById('currentAccountName').textContent = displayName;
+      document.getElementById('userDisplay').innerHTML = `<i class="fas fa-user-circle me-1"></i>${displayEmail}`;
+      
+      // Update user info card - use proper user name from login
+      const userName = displayName ? displayName.split(' ')[0] : 'User';
+      document.getElementById('userName').textContent = userName;
+      document.getElementById('userEmail').textContent = displayEmail;
       
       // Update wallet address
       const walletDisplay = userStats.walletAddress.slice(0, 8) + '...' + userStats.walletAddress.slice(-4);
