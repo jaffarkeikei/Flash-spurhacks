@@ -313,6 +313,130 @@
       transform: translateY(-1px);
     }
 
+    /* Voice Payment Styles */
+    .btn-voice {
+      background: linear-gradient(135deg, #ff6b6b, #ffa500);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-voice:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+      color: white;
+    }
+
+    .btn-voice.listening {
+      animation: pulse-voice 1.5s infinite;
+    }
+
+    @keyframes pulse-voice {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .voice-animation {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      margin: 20px 0;
+    }
+
+    .voice-wave {
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, #ff6b6b, #ffa500);
+      border-radius: 2px;
+      animation: voice-wave 1.2s ease-in-out infinite;
+    }
+
+    .voice-wave:nth-child(1) { animation-delay: 0s; }
+    .voice-wave:nth-child(2) { animation-delay: 0.4s; }
+    .voice-wave:nth-child(3) { animation-delay: 0.8s; }
+
+    @keyframes voice-wave {
+      0%, 100% { height: 20px; }
+      50% { height: 40px; }
+    }
+
+    .voice-transcript {
+      background: #f8f9ff;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .transcript-text {
+      font-style: italic;
+      color: #667eea;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    .voice-confirmation {
+      background: #e8f5e8;
+      border: 2px solid #28a745;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .payment-summary {
+      margin-bottom: 20px;
+    }
+
+    .confirmation-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .voice-commands-help {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .voice-examples ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .voice-examples li {
+      background: #f8f9ff;
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 8px;
+      font-family: monospace;
+      color: #667eea;
+      border-left: 3px solid #667eea;
+    }
+
+    .voice-status {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .voice-status.listening .voice-animation .voice-wave {
+      animation-play-state: running;
+    }
+
+    .voice-status.idle .voice-animation .voice-wave {
+      animation-play-state: paused;
+      height: 20px;
+    }
+
     .transaction-avatar {
       width: 45px;
       height: 45px;
@@ -913,6 +1037,10 @@
         <div class="section-header">
           <i class="fas fa-paper-plane"></i>
           <h5>Send Cross-Border Payment</h5>
+          <button class="btn btn-voice" id="voicePaymentBtn" title="AI Voice Payments">
+            <i class="fas fa-microphone"></i>
+            <span class="voice-text">Voice AI</span>
+          </button>
           </div>
         <div class="section-body" style="position: relative;">
           <div class="loading-overlay" id="paymentLoading">
@@ -1029,6 +1157,72 @@
               </div>
             </div>
             
+  <!-- Voice Payment Modal -->
+  <div class="modal-overlay" id="voiceModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header" style="background: linear-gradient(135deg, #ff6b6b, #ffa500);">
+        <button class="modal-close" onclick="closeVoiceModal()" style="color: white;">&times;</button>
+        <div class="success-icon" style="background: white; color: #ff6b6b;">
+          <i class="fas fa-microphone" id="voiceIcon"></i>
+        </div>
+        <h2 class="modal-title" style="color: white;">AI Voice Payments</h2>
+        <p class="modal-subtitle" style="color: rgba(255,255,255,0.9);" id="voiceSubtitle">Ready to listen</p>
+      </div>
+      <div class="modal-body">
+        <div class="voice-status" id="voiceStatus">
+          <div class="text-center">
+            <div class="voice-animation" id="voiceAnimation">
+              <div class="voice-wave"></div>
+              <div class="voice-wave"></div>
+              <div class="voice-wave"></div>
+            </div>
+            <h4 id="voiceStatusText">Click the microphone to start</h4>
+            <p class="text-muted" id="voiceStatusMessage">Say something like "Send 100 dollars to Alice"</p>
+          </div>
+        </div>
+        
+        <div class="voice-transcript" id="voiceTranscript" style="display: none;">
+          <strong>You said:</strong>
+          <div class="transcript-text" id="transcriptText"></div>
+        </div>
+        
+        <div class="voice-confirmation" id="voiceConfirmation" style="display: none;">
+          <div class="payment-summary">
+            <h5>Payment Details</h5>
+            <div id="paymentDetails"></div>
+          </div>
+          <div class="confirmation-actions">
+            <button class="btn btn-success" id="confirmPaymentBtn">
+              <i class="fas fa-check me-2"></i>Confirm Payment
+            </button>
+            <button class="btn btn-secondary" id="cancelPaymentBtn">
+              <i class="fas fa-times me-2"></i>Cancel
+            </button>
+          </div>
+        </div>
+        
+        <div class="voice-commands-help">
+          <details>
+            <summary style="cursor: pointer; color: #667eea; font-weight: 600;">
+              <i class="fas fa-question-circle me-1"></i> Voice Commands Help
+            </summary>
+            <div class="mt-2">
+              <div class="voice-examples">
+                <p><strong>Try saying:</strong></p>
+                <ul>
+                  <li>"Send 100 dollars to Alice"</li>
+                  <li>"Pay 50 euros to demo@flashsettle.com"</li>
+                  <li>"Transfer 25 USDC to Bob"</li>
+                  <li>"Send 200 pounds to Bob"</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Account Details Modal -->
   <div class="modal-overlay" id="accountModal">
     <div class="modal-content">
@@ -1094,7 +1288,8 @@
 
 
 
-  <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+      <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/js/voicePayments.js"></script>
   <script>
     // --- Demo Accounts Setup ---
     const demoAccounts = [
@@ -1649,6 +1844,168 @@
          }, 300);
        }, 3000);
     }
+
+    // Voice Payment Integration
+    function initializeVoicePayments() {
+      const voiceBtn = document.getElementById('voicePaymentBtn');
+      const voiceModal = document.getElementById('voiceModal');
+      
+      if (!voiceBtn || !window.voicePaymentSystem) {
+        console.warn('Voice payment system not available');
+        return;
+      }
+
+      // Voice button click handler
+      voiceBtn.addEventListener('click', function() {
+        openVoiceModal();
+      });
+
+      // Listen for voice state changes
+      window.addEventListener('voiceStateChanged', function(event) {
+        const { state, message, data } = event.detail;
+        updateVoiceModalUI(state, message, data);
+      });
+
+      // Confirmation handlers
+      document.getElementById('confirmPaymentBtn').addEventListener('click', function() {
+        const paymentData = this.dataset.paymentData;
+        if (paymentData) {
+          window.voicePaymentSystem.executeVoicePayment(JSON.parse(paymentData));
+        }
+      });
+
+      document.getElementById('cancelPaymentBtn').addEventListener('click', function() {
+        resetVoiceModal();
+      });
+    }
+
+    function openVoiceModal() {
+      const voiceModal = document.getElementById('voiceModal');
+      voiceModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      // Auto-start listening after a short delay
+      setTimeout(() => {
+        window.voicePaymentSystem.startListening();
+      }, 500);
+    }
+
+    function closeVoiceModal() {
+      const voiceModal = document.getElementById('voiceModal');
+      voiceModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      
+      // Stop listening
+      window.voicePaymentSystem.stopListening();
+      resetVoiceModal();
+    }
+
+    function resetVoiceModal() {
+      document.getElementById('voiceTranscript').style.display = 'none';
+      document.getElementById('voiceConfirmation').style.display = 'none';
+      document.getElementById('voiceStatus').style.display = 'block';
+      
+      const statusText = document.getElementById('voiceStatusText');
+      const statusMessage = document.getElementById('voiceStatusMessage');
+      statusText.textContent = 'Click the microphone to start';
+      statusMessage.textContent = 'Say something like "Send 100 dollars to Alice"';
+    }
+
+    function updateVoiceModalUI(state, message, data) {
+      const voiceIcon = document.getElementById('voiceIcon');
+      const voiceSubtitle = document.getElementById('voiceSubtitle');
+      const voiceBtn = document.getElementById('voicePaymentBtn');
+      const statusText = document.getElementById('voiceStatusText');
+      const statusMessage = document.getElementById('voiceStatusMessage');
+      
+      switch (state) {
+        case 'listening':
+          voiceIcon.className = 'fas fa-microphone';
+          voiceSubtitle.textContent = 'Listening...';
+          voiceBtn.classList.add('listening');
+          statusText.textContent = 'Listening...';
+          statusMessage.textContent = 'Speak now! Tell me who to pay and how much.';
+          break;
+          
+        case 'processing':
+          voiceIcon.className = 'fas fa-brain';
+          voiceSubtitle.textContent = 'Processing with AI';
+          statusText.textContent = 'Processing...';
+          statusMessage.textContent = message;
+          
+          if (message.includes('Processing:')) {
+            document.getElementById('voiceTranscript').style.display = 'block';
+            document.getElementById('transcriptText').textContent = message.replace('Processing: ', '');
+          }
+          break;
+          
+        case 'confirmation':
+          voiceIcon.className = 'fas fa-question-circle';
+          voiceSubtitle.textContent = 'Confirm Payment';
+          statusText.textContent = 'Payment Ready';
+          
+          document.getElementById('voiceStatus').style.display = 'none';
+          document.getElementById('voiceConfirmation').style.display = 'block';
+          
+          // Populate payment details
+          const paymentDetails = document.getElementById('paymentDetails');
+          paymentDetails.innerHTML = `
+            <div class="summary-row">
+              <span class="summary-label">Amount</span>
+              <span class="summary-value">${data.amount} ${data.currency}</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Recipient</span>
+              <span class="summary-value">${data.recipient}</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Your Command</span>
+              <span class="summary-value">"${data.originalText}"</span>
+            </div>
+          `;
+          
+          // Store payment data for confirmation
+          document.getElementById('confirmPaymentBtn').dataset.paymentData = JSON.stringify(data);
+          break;
+          
+        case 'success':
+          voiceIcon.className = 'fas fa-check-circle';
+          voiceSubtitle.textContent = 'Payment Sent!';
+          statusText.textContent = 'Success!';
+          statusMessage.textContent = message;
+          
+          setTimeout(() => {
+            closeVoiceModal();
+          }, 3000);
+          break;
+          
+        case 'error':
+          voiceIcon.className = 'fas fa-exclamation-triangle';
+          voiceSubtitle.textContent = 'Error';
+          statusText.textContent = 'Error';
+          statusMessage.textContent = message;
+          break;
+          
+        case 'idle':
+        default:
+          voiceIcon.className = 'fas fa-microphone';
+          voiceSubtitle.textContent = 'Ready to listen';
+          voiceBtn.classList.remove('listening');
+          statusText.textContent = 'Ready';
+          statusMessage.textContent = 'Click the microphone to start voice payment';
+          break;
+      }
+    }
+
+    // Initialize voice payments when page loads
+    window.addEventListener('DOMContentLoaded', function() {
+      // Wait for voice system to be ready
+      setTimeout(initializeVoicePayments, 1000);
+    });
+
+    // Expose functions globally
+    window.openVoiceModal = openVoiceModal;
+    window.closeVoiceModal = closeVoiceModal;
   </script>
 </body>
 
