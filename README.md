@@ -208,12 +208,14 @@ See our [Architecture Document](docs/architecture.md) for detailed technical spe
 - [x] **Stellar Passkeys Integration - Web3 biometric authentication**
 - [ ] **Mainnet deployment with funded accounts**
 - [ ] **Circle production API integration**
+- [ ] **Real-time Cross-Chain Swaps**
 - [ ] **Advanced ML payment routing (TensorFlow.js)**
 - [ ] **Gasless transaction sponsorship**
 - [ ] **Institutional API enhancements**
 - [ ] **Mobile app development**
 - [ ] **Enterprise compliance features**
 - [ ] **Multi-chain expansion (Ethereum, Solana)**
+- [ ] **AI Fraud Detection: Real-time behavioral analysis prevents fraud**
 
 #### 🔐 Stellar Passkeys - Web3 Security Innovation
 
