@@ -93,4 +93,7 @@ build/Release/
 # Project specific
 tmp/
 temp/
-.cache/ 
+.cache/
+
+# Generated environment config (contains API keys)
+public/js/env-config.js 

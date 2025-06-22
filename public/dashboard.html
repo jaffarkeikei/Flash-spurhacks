@@ -1039,7 +1039,7 @@
           <h5>Send Cross-Border Payment</h5>
           <button class="btn btn-voice" id="voicePaymentBtn" title="AI Voice Payments">
             <i class="fas fa-microphone"></i>
-            <span class="voice-text">Voice AI</span>
+            <span class="voice-text">Flash AI</span>
           </button>
           </div>
         <div class="section-body" style="position: relative;">
@@ -1289,7 +1289,14 @@
 
 
       <script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="/js/voicePayments.js"></script>
+<script src="/js/env-config.js"></script>
+<script src="/js/config.js"></script>
+<script>
+    // Force reload of voicePayments.js with cache busting
+    const script = document.createElement('script');
+    script.src = `/js/voicePayments.js?v=${Date.now()}`;
+    document.head.appendChild(script);
+</script>
   <script>
     // --- Demo Accounts Setup ---
     const demoAccounts = [
