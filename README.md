@@ -30,15 +30,23 @@ Flash is a next-generation payment infrastructure that enables **instant, low-co
 - **AI-Optimized Routes**: Machine learning determines optimal settlement paths and currency pairs
 - **Programmable Compliance**: Built-in AML/KYC checks where required
 
-## 🔍 Why Aptos?
+## 🔍 Why Aptos + Stellar?
 
-Aptos provides several critical advantages that make Flash possible:
+**Aptos** provides several critical advantages for payment infrastructure:
 
 1. **Native Stablecoins**: Circle's USDC and Tether's USDT are natively issued on Aptos, eliminating bridge risks.
 2. **Transaction Speed**: ~0.65s finality and 19.2K TPS vs. Ethereum's 15 TPS.
 3. **Gas Sponsorship**: Allows merchants/recipients to transact without owning APT tokens.
 4. **Move VM Security**: Robust programming model for handling financial operations.
 5. **Cross-Chain Capability**: CCTP integration for seamless transfers with other blockchains.
+
+**Stellar** enhances security and user experience:
+
+1. **Passkey Infrastructure**: Built-in support for modern authentication standards
+2. **Low-Cost Verification**: Minimal fees for authentication contract calls
+3. **Fast Consensus**: 3-5 second transaction finality for auth operations
+4. **Developer Tools**: Mature ecosystem for WebAuthn and passkey integration
+5. **Regulatory Clarity**: Strong compliance framework for financial applications
 
 ## 🏗️ Architecture
 
@@ -200,11 +208,37 @@ See our [Architecture Document](docs/architecture.md) for detailed technical spe
 - [ ] **Mainnet deployment with funded accounts**
 - [ ] **Circle production API integration**
 - [ ] **Advanced ML payment routing (TensorFlow.js)**
+- [ ] **Stellar Passkeys Integration** - Web3 biometric authentication
 - [ ] **Gasless transaction sponsorship**
 - [ ] **Institutional API enhancements**
 - [ ] **Mobile app development**
 - [ ] **Enterprise compliance features**
 - [ ] **Multi-chain expansion (Ethereum, Solana)**
+
+#### 🔐 Stellar Passkeys - Web3 Security Innovation
+
+**Revolutionary Authentication Experience:**
+- **Biometric Login**: Replace passwords with fingerprint/FaceID authentication
+- **Hardware-Level Security**: Secure enclave protection via WebAuthn standard
+- **Cross-Platform Support**: Works on mobile devices, laptops, and desktop browsers
+- **Stellar Smart Contracts**: Deployed contracts handle passkey verification on-chain
+- **Multi-Factor Authentication**: Combines "something you are" with "something you have"
+
+**Technical Implementation:**
+- **Frontend**: WebAuthn API integration with passkey creation/verification
+- **Backend**: Stellar SDK integration for smart contract interactions
+- **Smart Contracts**: Deployed on Stellar testnet for passkey management
+- **Database**: Store encrypted passkey credentials and user associations
+- **Security**: Hardware-backed cryptographic operations ensure maximum security
+
+**User Experience Flow:**
+1. **Registration**: User creates passkey using biometric authentication
+2. **Smart Contract**: Passkey public key stored on Stellar blockchain
+3. **Login**: Biometric verification generates cryptographic signature
+4. **Verification**: Stellar smart contract validates signature on-chain
+5. **Access Granted**: Seamless login without traditional passwords
+
+This positions Flash as a pioneer in Web3 security, demonstrating how traditional fintech can leverage cutting-edge blockchain authentication methods.
 
 ### 🏆 Hackathon Winning Features
 
